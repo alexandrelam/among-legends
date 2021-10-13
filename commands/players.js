@@ -4,14 +4,23 @@ const { MessageEmbed } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("players")
-    .setDescription("List of all the players"),
+    .setDescription("Display the list of players"),
   async execute(interaction) {
-    const embed = new MessageEmbed()
+    const bluePlayers = interaction.client.game.teamBlue.map((p) => p.tag);
+    const redPlayers = interaction.client.game.teamRed.map((p) => p.tag);
+
+    const blue = new MessageEmbed()
       .setColor("#0099ff")
-      .setTitle("List of players")
-      .setDescription(`${interaction.client.game.teamBlue.join("\n")}`);
+      .setTitle("Blue players")
+      .setDescription(`${bluePlayers.join("\n")}`);
+
+    const red = new MessageEmbed()
+      .setColor("#ff0055")
+      .setTitle("Red players")
+      .setDescription(`${redPlayers.join("\n")}`);
+
     await interaction.reply({
-      embeds: [embed],
+      embeds: [blue, red],
     });
   },
 };
