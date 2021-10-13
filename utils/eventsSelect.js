@@ -7,4 +7,10 @@ module.exports.handleSelect = async (interaction) => {
       ephemeral: true,
     });
   }
+
+  if (interaction.customId === "vote-imposter") {
+    if (interaction.value === "nobody") {
+      interaction.reply({ content: "You voted for nobody", ephemeral: true });
+    }
+  }
 };
