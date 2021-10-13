@@ -1,4 +1,5 @@
 const Player = require("../game/Player");
+const roles = require("../other/roles");
 
 function isPlayerInTeam(playerTag, team) {
   return team.some((p) => p.tag === playerTag);
@@ -32,4 +33,26 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
   }
 }
 
-module.exports = { isPlayerInTeam, playerJoinTeam };
+function getRandomRole() {
+  let flatten = [];
+  roles.forEach((role) => {
+    for (let i = 0; i < role.weight * 100; i++) {
+      flatten.push(role);
+    }
+  });
+  flatten = shuffle(flatten);
+  return flatten[Math.floor(Math.random() * flatten.length)];
+}
+
+function shuffle(a) {
+  var j, x, i;
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = a[i];
+    a[i] = a[j];
+    a[j] = x;
+  }
+  return a;
+}
+
+module.exports = { isPlayerInTeam, playerJoinTeam, getRandomRole };

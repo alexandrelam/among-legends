@@ -1,4 +1,4 @@
-const { playerJoinTeam } = require("./helpers");
+const { playerJoinTeam, getRandomRole } = require("./helpers");
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return;
@@ -13,5 +13,10 @@ module.exports.handleButton = async (interaction) => {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
     playerJoinTeam(interaction, teamRed, teamBlue, "red");
+  }
+
+  if (interaction.customId === "get-role") {
+    const role = getRandomRole();
+    interaction.reply({ content: `${role.name}`, ephemeral: true });
   }
 };
