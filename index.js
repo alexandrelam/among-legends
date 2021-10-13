@@ -1,10 +1,13 @@
 const fs = require("fs");
 require("dotenv").config();
 const { Client, Collection, Intents } = require("discord.js");
+const game = require("./game/game");
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
+
+client.game = game;
 
 const commandFiles = fs
   .readdirSync("./commands")
