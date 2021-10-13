@@ -2,9 +2,9 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("Replies with Pong!"),
+    .setName("al")
+    .setDescription("Base command for Among Legends!"),
   async execute(interaction) {
-    await interaction.reply("Pontestg!");
+    await interaction.reply("You are among legends");
   },
 };
