@@ -7,8 +7,8 @@ const {
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("Replies with Pong!"),
+    .setName("test")
+    .setDescription("This is a test command"),
   async execute(interaction) {
     const row = new MessageActionRow().addComponents(
       new MessageSelectMenu()
