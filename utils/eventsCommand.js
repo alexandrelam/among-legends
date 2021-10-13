@@ -8,7 +8,9 @@ module.exports.handleCommand = async (interaction) => {
   try {
     await command.execute(interaction);
     console.log(
-      `${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`
+      `${interaction.user.tag} in #${interaction.channel.name} triggered /${
+        interaction.commandName
+      } at ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}.`
     );
   } catch (error) {
     console.error(error);
