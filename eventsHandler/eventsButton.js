@@ -2,6 +2,7 @@ const {
   playerJoinTeam,
   attributeRoles,
   getImageUrl,
+  getCurrentPlayer,
 } = require("../utils/helpers");
 const { MessageEmbed } = require("discord.js");
 
@@ -23,13 +24,7 @@ module.exports.handleButton = async (interaction) => {
   }
 
   if (interaction.customId === "get-role") {
-    const player_tag = interaction.user.tag;
-    const all_players = [
-      ...interaction.client.game.teamBlue,
-      ...interaction.client.game.teamRed,
-    ];
-    const player = all_players.find((p) => player_tag === p.tag);
-
+    const player = getCurrentPlayer(interaction);
     const embed = new MessageEmbed()
       .setColor("#0099ff")
       .setTitle(`${player.role.name} (${player.role.type})`)

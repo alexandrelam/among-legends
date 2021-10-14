@@ -4,4 +4,5 @@ module.exports = {
   isTwoTeam: false,
   teamBlue: [],
   teamRed: [],
+  nbImposter: 1,
 };

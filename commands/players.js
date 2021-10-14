@@ -6,8 +6,12 @@ module.exports = {
     .setName("players")
     .setDescription("Display the list of players"),
   async execute(interaction) {
-    const bluePlayers = interaction.client.game.teamBlue.map((p) => p.tag);
-    const redPlayers = interaction.client.game.teamRed.map((p) => p.tag);
+    const bluePlayers = interaction.client.game.teamBlue.map(
+      (p) => `${p.tag} - ${p.score}`
+    );
+    const redPlayers = interaction.client.game.teamRed.map(
+      (p) => `${p.tag} - ${p.score}`
+    );
 
     const blue = new MessageEmbed()
       .setColor("#0099ff")

@@ -68,9 +68,19 @@ function getImageUrl(imageName) {
   return `https://raw.githubusercontent.com/${config.gituser}/${config.repo}/main/assets/${imageName}`;
 }
 
+function getCurrentPlayer(interaction) {
+  const player_tag = interaction.user.tag;
+  const all_players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ];
+  return all_players.find((p) => player_tag === p.tag);
+}
+
 module.exports = {
   isPlayerInTeam,
   playerJoinTeam,
   attributeRoles,
   getImageUrl,
+  getCurrentPlayer,
 };

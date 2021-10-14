@@ -1,3 +1,6 @@
+const { givePoint } = require("../utils/voteHandler");
+const { getCurrentPlayer } = require("../utils/helpers");
+
 module.exports.handleSelect = async (interaction) => {
   if (!interaction.isSelectMenu()) return;
 
@@ -11,8 +14,11 @@ module.exports.handleSelect = async (interaction) => {
       ...interaction.client.game.teamRed,
     ];
 
+    const player = getCurrentPlayer(interaction);
+
     players.forEach((p) => {
       if (interaction.values[0] === p.tag) {
+        givePoint(player, p);
         interaction.reply({
           content: `You voted for ${p.tag}`,
           ephemeral: true,
