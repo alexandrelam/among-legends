@@ -9,18 +9,25 @@ const { MessageEmbed } = require("discord.js");
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return;
 
-  if (interaction.customId === "join-blue") {
+  if (interaction.customId.includes("join")) {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
-    playerJoinTeam(interaction, teamBlue, teamRed, "blue");
-    attributeRoles(interaction, teamBlue);
-  }
 
-  if (interaction.customId === "join-red") {
-    const teamBlue = interaction.client.game.teamBlue;
-    const teamRed = interaction.client.game.teamRed;
-    playerJoinTeam(interaction, teamRed, teamBlue, "red");
-    attributeRoles(interaction, teamRed);
+    if (interaction.customId === "join-blue") {
+      playerJoinTeam(interaction, teamBlue, teamRed, "blue");
+      attributeRoles(interaction, teamBlue);
+    }
+
+    if (interaction.customId === "join-red") {
+      playerJoinTeam(interaction, teamRed, teamBlue, "red");
+      attributeRoles(interaction, teamRed);
+    }
+
+    // set number of imposter
+    const players = [...teamBlue, ...teamRed];
+    if (players.length > 3) {
+      interaction.client.game.nbImposter = 2;
+    }
   }
 
   if (interaction.customId === "get-role") {
