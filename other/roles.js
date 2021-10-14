@@ -36,6 +36,6 @@ module.exports = [
     name: "Imposter",
     description: "Perdre la game, sans te faire repérer!",
     weight: 0.8,
-    image: "#",
+    image: "imposter.png",
   },
 ];
