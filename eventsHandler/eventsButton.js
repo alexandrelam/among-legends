@@ -27,6 +27,8 @@ module.exports.handleButton = async (interaction) => {
     const players = [...teamBlue, ...teamRed];
     if (players.length > 3) {
       interaction.client.game.nbImposter = 2;
+    } else {
+      interaction.client.game.nbImposter = 1;
     }
   }
 
