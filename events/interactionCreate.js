@@ -1,6 +1,6 @@
-const { handleButton } = require("../utils/eventsButton");
-const { handleCommand } = require("../utils/eventsCommand");
-const { handleSelect } = require("../utils/eventsSelect");
+const { handleButton } = require("../eventsHandler/eventsButton");
+const { handleCommand } = require("../eventsHandler/eventsCommand");
+const { handleSelect } = require("../eventsHandler/eventsSelect");
 module.exports = {
   name: "interactionCreate",
   async execute(interaction) {

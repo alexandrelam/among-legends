@@ -1,4 +1,4 @@
-const { playerJoinTeam, getRandomRole } = require("./helpers");
+const { playerJoinTeam, getRandomRole } = require("../utils/helpers");
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return;
