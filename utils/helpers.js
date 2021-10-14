@@ -19,13 +19,15 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
       content: `${playerTag} switched to ${teamLabel} team`,
     });
 
-    // if player already in team don't add him
+    // if player is not already in team add him
   } else if (!isPlayerInTeam(playerTag, team)) {
     team.push(newPlayer);
 
     interaction.reply({
       content: `${playerTag} joined ${teamLabel} team`,
     });
+
+    // if player is already in team don't add him
   } else {
     interaction.reply({
       content: `${playerTag} is already in ${teamLabel} team`,
