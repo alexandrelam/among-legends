@@ -35,6 +35,12 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
   }
 }
 
+function attributeRoles(team) {
+  team.forEach((p) => {
+    p.role = getRandomRole();
+  });
+}
+
 function getRandomRole() {
   let flatten = [];
   roles.forEach((role) => {
@@ -57,4 +63,8 @@ function shuffle(a) {
   return a;
 }
 
-module.exports = { isPlayerInTeam, playerJoinTeam, getRandomRole };
+module.exports = {
+  isPlayerInTeam,
+  playerJoinTeam,
+  attributeRoles,
+};
