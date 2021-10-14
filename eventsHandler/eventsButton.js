@@ -1,4 +1,8 @@
-const { playerJoinTeam, attributeRoles } = require("../utils/helpers");
+const {
+  playerJoinTeam,
+  attributeRoles,
+  getImageUrl,
+} = require("../utils/helpers");
 const { MessageEmbed } = require("discord.js");
 
 module.exports.handleButton = async (interaction) => {
@@ -30,7 +34,7 @@ module.exports.handleButton = async (interaction) => {
       .setColor("#0099ff")
       .setTitle(`${player.role.name} (${player.role.type})`)
       .setDescription(player.role.description)
-      .setThumbnail("https://i.imgur.com/AfFp7pu.png");
+      .setThumbnail(getImageUrl(player.role.image));
 
     await interaction.reply({
       ephemeral: true,

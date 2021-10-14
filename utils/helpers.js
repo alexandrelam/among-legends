@@ -1,5 +1,6 @@
 const Player = require("../game/Player");
 const roles = require("../other/roles");
+const config = require("../config.json");
 
 function isPlayerInTeam(playerTag, team) {
   return team.some((p) => p.tag === playerTag);
@@ -63,8 +64,13 @@ function shuffle(a) {
   return a;
 }
 
+function getImageUrl(imageName) {
+  return `https://raw.githubusercontent.com/${config.gituser}/${config.repo}/main/assets/${imageName}`;
+}
+
 module.exports = {
   isPlayerInTeam,
   playerJoinTeam,
   attributeRoles,
+  getImageUrl,
 };
