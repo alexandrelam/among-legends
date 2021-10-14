@@ -36,13 +36,13 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
   }
 }
 
-function attributeRoles(team) {
+function attributeRoles(interaction, team) {
   team.forEach((p) => {
-    p.role = getRandomRole();
+    p.role = getRandomRole(interaction);
   });
 }
 
-function getRandomRole() {
+function getRandomRole(interaction) {
   let flatten = [];
   roles.forEach((role) => {
     for (let i = 0; i < role.weight * 100; i++) {
@@ -50,7 +50,28 @@ function getRandomRole() {
     }
   });
   flatten = shuffle(flatten);
-  return flatten[Math.floor(Math.random() * flatten.length)];
+  const role = flatten[Math.floor(Math.random() * flatten.length)];
+  const max_nb_imposter = interaction.client.game.nbImposter;
+
+  if (getNumberImposter(interaction) >= max_nb_imposter)
+    getRandomRole(interaction);
+
+  return role;
+}
+
+function getNumberImposter(interaction) {
+  const players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ];
+
+  let sum = 0;
+
+  players.forEach((p) => {
+    if (p.role.type === "Imposter") sum++;
+  });
+
+  return sum;
 }
 
 function shuffle(a) {

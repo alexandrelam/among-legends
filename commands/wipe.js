@@ -8,6 +8,7 @@ module.exports = {
     interaction.client.game.isRunning = false;
     interaction.client.game.teamBlue = [];
     interaction.client.game.teamRed = [];
+    interaction.client.game.nbImposter = 1;
     interaction.reply("Boom, big reset!");
   },
 };

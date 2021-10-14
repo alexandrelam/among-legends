@@ -13,14 +13,14 @@ module.exports.handleButton = async (interaction) => {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
     playerJoinTeam(interaction, teamBlue, teamRed, "blue");
-    attributeRoles(teamBlue);
+    attributeRoles(interaction, teamBlue);
   }
 
   if (interaction.customId === "join-red") {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
     playerJoinTeam(interaction, teamRed, teamBlue, "red");
-    attributeRoles(teamRed);
+    attributeRoles(interaction, teamRed);
   }
 
   if (interaction.customId === "get-role") {
