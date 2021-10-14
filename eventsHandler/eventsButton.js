@@ -1,4 +1,5 @@
 const { playerJoinTeam, attributeRoles } = require("../utils/helpers");
+const { MessageEmbed } = require("discord.js");
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return;
@@ -25,6 +26,15 @@ module.exports.handleButton = async (interaction) => {
     ];
     const player = all_players.find((p) => player_tag === p.tag);
 
-    interaction.reply({ content: `${player.role.name}`, ephemeral: true });
+    const embed = new MessageEmbed()
+      .setColor("#0099ff")
+      .setTitle(`${player.role.name} (${player.role.type})`)
+      .setDescription(player.role.description)
+      .setThumbnail("https://i.imgur.com/AfFp7pu.png");
+
+    await interaction.reply({
+      ephemeral: true,
+      embeds: [embed],
+    });
   }
 };
