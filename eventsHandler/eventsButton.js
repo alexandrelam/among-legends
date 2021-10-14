@@ -1,4 +1,4 @@
-const { playerJoinTeam, getRandomRole } = require("../utils/helpers");
+const { playerJoinTeam, attributeRoles } = require("../utils/helpers");
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return;
@@ -7,16 +7,24 @@ module.exports.handleButton = async (interaction) => {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
     playerJoinTeam(interaction, teamBlue, teamRed, "blue");
+    attributeRoles(teamBlue);
   }
 
   if (interaction.customId === "join-red") {
     const teamBlue = interaction.client.game.teamBlue;
     const teamRed = interaction.client.game.teamRed;
     playerJoinTeam(interaction, teamRed, teamBlue, "red");
+    attributeRoles(teamRed);
   }
 
   if (interaction.customId === "get-role") {
-    const role = getRandomRole();
-    interaction.reply({ content: `${role.name}`, ephemeral: true });
+    const player_tag = interaction.user.tag;
+    const all_players = [
+      ...interaction.client.game.teamBlue,
+      ...interaction.client.game.teamRed,
+    ];
+    const player = all_players.find((p) => player_tag === p.tag);
+
+    interaction.reply({ content: `${player.role.name}`, ephemeral: true });
   }
 };
