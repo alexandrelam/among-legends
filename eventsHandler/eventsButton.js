@@ -5,6 +5,7 @@ const {
   getCurrentPlayer,
 } = require('../utils/helpers')
 const { MessageEmbed } = require('discord.js')
+const { getCanardOrders } = require('../other/canard')
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return
@@ -12,6 +13,7 @@ module.exports.handleButton = async (interaction) => {
   if (interaction.customId.includes('join')) {
     const teamBlue = interaction.client.game.teamBlue
     const teamRed = interaction.client.game.teamRed
+    getCanardOrders(interaction)
 
     if (interaction.customId === 'join-blue') {
       playerJoinTeam(interaction, teamBlue, teamRed, 'blue')

@@ -1,6 +1,5 @@
 module.exports = {
-  isRunning: false,
-  isGameStart: false, //used for timer of every 5 mins
+  isTimer: false,
   isTwoTeam: false,
   teamBlue: [],
   teamRed: [],
