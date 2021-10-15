@@ -5,4 +5,4 @@ module.exports = {
   teamBlue: [],
   teamRed: [],
   nbImposter: 1,
-};
+}

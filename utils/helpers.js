@@ -1,101 +1,101 @@
-const Player = require("../game/Player");
-const roles = require("../other/roles");
-const config = require("../config.json");
+const Player = require('../game/Player')
+const roles = require('../other/roles')
+const config = require('../config.json')
 
 function isPlayerInTeam(playerTag, team) {
-  return team.some((p) => p.tag === playerTag);
+  return team.some((p) => p.tag === playerTag)
 }
 
 function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
-  const playerTag = interaction.user.tag;
+  const playerTag = interaction.user.tag
 
-  newPlayer = new Player(playerTag);
+  newPlayer = new Player(playerTag)
 
   // if player is in opposite team switch him
   if (isPlayerInTeam(playerTag, opposingTeam)) {
-    opposingTeam.splice(opposingTeam.indexOf(newPlayer), 1);
-    team.push(newPlayer);
+    opposingTeam.splice(opposingTeam.indexOf(newPlayer), 1)
+    team.push(newPlayer)
 
     interaction.reply({
       content: `${playerTag} switched to ${teamLabel} team`,
-    });
+    })
 
     // if player is not already in team add him
   } else if (!isPlayerInTeam(playerTag, team)) {
-    team.push(newPlayer);
+    team.push(newPlayer)
 
     interaction.reply({
       content: `${playerTag} joined ${teamLabel} team`,
-    });
+    })
 
     // if player is already in team don't add him
   } else {
     interaction.reply({
       content: `${playerTag} is already in ${teamLabel} team`,
-    });
+    })
   }
 }
 
 function attributeRoles(interaction, team) {
   team.forEach((p) => {
-    p.role = getRandomRole(interaction);
-  });
+    p.role = getRandomRole(interaction)
+  })
 }
 
 function getRandomRole(interaction) {
-  let flatten = [];
+  let flatten = []
   roles.forEach((role) => {
     for (let i = 0; i < role.weight * 100; i++) {
-      flatten.push(role);
+      flatten.push(role)
     }
-  });
-  flatten = shuffle(flatten);
-  const role = flatten[Math.floor(Math.random() * flatten.length)];
-  const max_nb_imposter = interaction.client.game.nbImposter;
+  })
+  flatten = shuffle(flatten)
+  const role = flatten[Math.floor(Math.random() * flatten.length)]
+  const max_nb_imposter = interaction.client.game.nbImposter
 
   if (getNumberImposter(interaction) >= max_nb_imposter)
-    getRandomRole(interaction);
+    getRandomRole(interaction)
 
-  return role;
+  return role
 }
 
 function getNumberImposter(interaction) {
   const players = [
     ...interaction.client.game.teamBlue,
     ...interaction.client.game.teamRed,
-  ];
+  ]
 
-  let sum = 0;
+  let sum = 0
 
   players.forEach((p) => {
-    if (p.role.type === "Imposter") sum++;
-  });
+    if (p.role.type === 'Imposter') sum++
+  })
 
-  return sum;
+  return sum
 }
 
 function shuffle(a) {
-  var j, x, i;
+  var j, x, i
   for (i = a.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i + 1));
-    x = a[i];
-    a[i] = a[j];
-    a[j] = x;
+    j = Math.floor(Math.random() * (i + 1))
+    x = a[i]
+    a[i] = a[j]
+    a[j] = x
   }
-  return a;
+  return a
 }
 
 function getImageUrl(imageName) {
-  return `https://raw.githubusercontent.com/${config.gituser}/${config.repo}/main/assets/${imageName}`;
+  return `https://raw.githubusercontent.com/${config.gituser}/${config.repo}/main/assets/${imageName}`
 }
 
 function getCurrentPlayer(interaction) {
-  const player_tag = interaction.user.tag;
+  const player_tag = interaction.user.tag
   const all_players = [
     ...interaction.client.game.teamBlue,
     ...interaction.client.game.teamRed,
-  ];
-  return all_players.find((p) => player_tag === p.tag);
+  ]
+  return all_players.find((p) => player_tag === p.tag)
 }
 
 module.exports = {
@@ -104,4 +104,4 @@ module.exports = {
   attributeRoles,
   getImageUrl,
   getCurrentPlayer,
-};
+}
