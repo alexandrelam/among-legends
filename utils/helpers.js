@@ -1,6 +1,6 @@
 const Player = require('../game/Player')
-const roles = require('../other/roles')
 const config = require('../config.json')
+const { crewmateRoles, imposterRoles } = require('../other/roles')
 
 function isPlayerInTeam(playerTag, team) {
   return team.some((p) => p.tag === playerTag)
@@ -37,26 +37,38 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 }
 
 function attributeRoles(interaction, team) {
-  team.forEach((p) => {
-    p.role = getRandomRole(interaction)
-  })
+  var mapped_roles = []
+  const imposter_count = getRandomInt(interaction.client.game.nbImposter) + 1
+  for (let i = 0; i < imposter_count; i++) {
+    //Push imposters
+    mapped_roles.push(weightedRand(imposterRoles))
+  }
+  while (mapped_roles.length < team.length) {
+    //Fill with random roles
+    mapped_roles.push(weightedRand(crewmateRoles))
+  }
+  shuffle(mapped_roles)
+  for (let j = 0; j < mapped_roles.length; j++) {
+    team[j].role = mapped_roles[j]
+  }
 }
 
-function getRandomRole(interaction) {
-  let flatten = []
-  roles.forEach((role) => {
-    for (let i = 0; i < role.weight * 100; i++) {
-      flatten.push(role)
-    }
-  })
-  flatten = shuffle(flatten)
-  const role = flatten[Math.floor(Math.random() * flatten.length)]
-  const max_nb_imposter = interaction.client.game.nbImposter
+function weightedRand(list) {
+  var i,
+    sum = 0,
+    r = Math.random()
+  for (i of list) {
+    sum += i.weight
+    if (r <= sum) return i
+  }
+}
 
-  if (getNumberImposter(interaction) >= max_nb_imposter)
-    getRandomRole(interaction)
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
 
-  return role
+function getNbTeamImposter(team) {
+  return team.filter((p) => p.role.type === 'Imposter').length
 }
 
 function getNumberImposter(interaction) {
