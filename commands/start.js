@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require('@discordjs/builders')
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("start")
-    .setDescription("Starts the game"),
+    .setName('start')
+    .setDescription('Starts the game'),
   async execute(interaction) {
-    interaction.client.game.isGameStart = true;
-    interaction.reply("Game started!");
+    interaction.client.game.isGameStart = true
+    interaction.reply('Game started!')
   },
-};
+}
