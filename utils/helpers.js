@@ -13,7 +13,7 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 
   // if player is in opposite team switch him
   if (isPlayerInTeam(playerTag, opposingTeam)) {
-       opposingTeam.splice(opposingTeam.indexOf(newPlayer), 1)
+    opposingTeam.splice(opposingTeam.indexOf(newPlayer), 1)
     team.push(newPlayer)
 
     interaction.reply({
