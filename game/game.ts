@@ -1,6 +1,6 @@
 import { Player } from './Player'
 
-export class game {
+export class Game {
   isRunning: boolean = false
   isGameStart: boolean = false //used for timer of every 5 mins
   isTwoTeam: boolean = false

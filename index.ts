@@ -1,13 +1,13 @@
 import fs = require('fs')
-import { game } from './game/game'
+import { Game } from './game/game'
 require('dotenv').config()
 import { Client, Collection, Intents } from 'discord.js'
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
+const client: any = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
 client.commands = new Collection()
 
-client.game = game
+client.game = new Game()
 
 const commandFiles = fs
   .readdirSync('./commands')

@@ -2,9 +2,9 @@
   "name": "amonglegenddev",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "main": " index.js",
+    "main": " index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,7 +19,11 @@
     "ts-node": "^10.3.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.0",
-    "eslint": "^8.0.0"
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1"
   }
 }

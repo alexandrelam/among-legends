@@ -5,8 +5,6 @@ import { Role, roles } from '../other/roles'
 const config = require('../config.json')
 
 export function isPlayerInTeam(playerTag: string, team: Player[]): boolean {
-  console.log(team)
-
   return team.some((p) => p.tag === playerTag)
 }
 
@@ -14,7 +12,7 @@ export function playerJoinTeam(
   interaction: ButtonInteraction,
   team: Player[],
   opposingTeam: Player[],
-  teamLabel: string,
+  teamLabel: string
 ): void {
   const playerTag = interaction.user.tag
 
@@ -47,7 +45,7 @@ export function playerJoinTeam(
 
 export function attributeRoles(
   interaction: ButtonInteraction,
-  team: Player[],
+  team: Player[]
 ): void {
   team.forEach((p) => {
     p.role = getRandomRole(interaction)
