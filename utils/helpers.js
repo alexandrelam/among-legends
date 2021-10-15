@@ -42,15 +42,14 @@ function attributeRoles(interaction, team) {
   });
 }
 
-function getRandomRole(interaction) {
-  // il faut forcer au moins 1 ou 2 imposter 
-  // les étapes : 
+function getRandomRole(interaction, team) {
+  // il faut forcer au moins 1 ou 2 imposter
+  // les étapes :
   // 1. définir au hasard le nb d'impsoter
   // 2. attribuer au hasard les imposters dans un arr
   // 3. parmi les joueurs qui reste il faut leur donner un role
   // done!
-
-
+  /*
   let flatten = [];
   roles.forEach((role) => {
     for (let i = 0; i < role.weight * 100; i++) {
@@ -65,6 +64,15 @@ function getRandomRole(interaction) {
     getRandomRole(interaction);
 
   return role;
+  */
+}
+
+function getNbTeamImposter(interaction, team) {
+  let sum = 0;
+  team.forEach((p) => {
+    if (p.role.type === "Imposter") sum++;
+  });
+  return sum;
 }
 
 function getNumberImposter(interaction) {
