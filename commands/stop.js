@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { stopCanardPlayers } = require('../other/canard')
+const { stopOrderPlayers } = require('../other/orderRoles')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('stop')
     .setDescription('Stop the game'),
   async execute(interaction) {
-    stopCanardPlayers(interaction.client.game.intervalIds)
+    stopOrderPlayers(interaction.client.game.intervalIds)
     interaction.reply('Game has stopped')
   },
 }
