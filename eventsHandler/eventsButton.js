@@ -34,7 +34,7 @@ module.exports.handleButton = async (interaction) => {
 
   if (interaction.customId === 'get-role') {
     const player = getCurrentPlayer(interaction)
-    if (player.role) {
+    if (player && player.role) {
       const embed = new MessageEmbed()
         .setColor('#0099ff')
         .setTitle(`${player.role.name} (${player.role.type})`)
