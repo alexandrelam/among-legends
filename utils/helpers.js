@@ -40,14 +40,12 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 function attributeRoles(interaction, team) {
   var mapped_roles = []
   const imposter_count = getRandomInt(interaction.client.game.nbImposter) + 1
-  const canardrole = crewmateRoles.find((r) => r.name === 'Canard')
-  mapped_roles.push(canardrole)
-  /*
+
   for (let i = 0; i < imposter_count; i++) {
     //Push imposters
     mapped_roles.push(weightedRand(imposterRoles))
   }
-  */
+
   while (mapped_roles.length < team.length) {
     //Fill with random roles
     mapped_roles.push(weightedRand(crewmateRoles))
