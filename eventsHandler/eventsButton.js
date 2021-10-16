@@ -5,7 +5,6 @@ const {
   getCurrentPlayer,
 } = require('../utils/helpers')
 const { MessageEmbed } = require('discord.js')
-const { getCanardOrders } = require('../other/canard')
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return
@@ -13,7 +12,6 @@ module.exports.handleButton = async (interaction) => {
   if (interaction.customId.includes('join')) {
     const teamBlue = interaction.client.game.teamBlue
     const teamRed = interaction.client.game.teamRed
-    getCanardOrders(interaction)
 
     if (interaction.customId === 'join-blue') {
       playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
@@ -36,15 +34,22 @@ module.exports.handleButton = async (interaction) => {
 
   if (interaction.customId === 'get-role') {
     const player = getCurrentPlayer(interaction)
-    const embed = new MessageEmbed()
-      .setColor('#0099ff')
-      .setTitle(`${player.role.name} (${player.role.type})`)
-      .setDescription(player.role.description)
-      .setThumbnail(getImageUrl(player.role.image))
+    if (player.role) {
+      const embed = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(`${player.role.name} (${player.role.type})`)
+        .setDescription(player.role.description)
+        .setThumbnail(getImageUrl(player.role.image))
 
-    await interaction.reply({
-      ephemeral: true,
-      embeds: [embed],
-    })
+      await interaction.reply({
+        ephemeral: true,
+        embeds: [embed],
+      })
+    } else {
+      await interaction.reply({
+        content: 'You did not joined the game!',
+        ephemeral: true,
+      })
+    }
   }
 }

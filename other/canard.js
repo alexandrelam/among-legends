@@ -9,18 +9,32 @@ const canardOrders = [
   'Back maintenant!',
 ]
 
-function getCanardOrders(interaction) {
-  const userInstance = interaction.user
+function getCanardOrders(userInstance) {
+  return setInterval(() => {
+    const canardRandomOrder = getRandomOrder()
+    userInstance.send(canardRandomOrder)
+  }, 2000)
+}
 
-  setInterval(() => {
-    // toutes les 5 sec, check if timer est true
-    if (interaction.client.game.isTimer) {
-      setTimeout(() => {
-        const canardRandomOrder = getRandomOrder()
-        userInstance.send(canardRandomOrder)
-      }, 5 * 1000 * 60)
-    }
-  }, 5000)
+function initCanardPlayers(interaction) {
+  const players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ]
+  const canardPlayers = players.filter((p) => p.role.name === 'Canard')
+
+  let intervalIds = []
+
+  canardPlayers.forEach((p) => {
+    const id = getCanardOrders(p.userInstance)
+    intervalIds.push(id)
+  })
+
+  return intervalIds
+}
+
+function stopCanardPlayers(intervalIds) {
+  intervalIds.forEach((id) => clearInterval(id))
 }
 
 function getRandomOrder() {
@@ -28,4 +42,4 @@ function getRandomOrder() {
   return canardOrders[index]
 }
 
-module.exports = { getCanardOrders }
+module.exports = { initCanardPlayers, stopCanardPlayers }
