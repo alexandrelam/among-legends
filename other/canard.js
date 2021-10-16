@@ -13,7 +13,7 @@ function getCanardOrders(userInstance) {
   return setInterval(() => {
     const canardRandomOrder = getRandomOrder()
     userInstance.send(canardRandomOrder)
-  }, 2000)
+  }, 5 * 60 * 1000)
 }
 
 function initCanardPlayers(interaction) {
