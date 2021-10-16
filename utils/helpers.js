@@ -7,9 +7,10 @@ function isPlayerInTeam(playerTag, team) {
 }
 
 function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
-  const playerTag = interaction.user.tag
+  const userInstance = interaction.user
+  const playerTag = userInstance.tag
 
-  newPlayer = new Player(playerTag)
+  const newPlayer = new Player(userInstance)
 
   // if player is in opposite team switch him
   if (isPlayerInTeam(playerTag, opposingTeam)) {
@@ -39,10 +40,12 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 function attributeRoles(interaction, team) {
   var mapped_roles = []
   const imposter_count = getRandomInt(interaction.client.game.nbImposter) + 1
+
   for (let i = 0; i < imposter_count; i++) {
     //Push imposters
     mapped_roles.push(weightedRand(imposterRoles))
   }
+
   while (mapped_roles.length < team.length) {
     //Fill with random roles
     mapped_roles.push(weightedRand(crewmateRoles))
@@ -65,25 +68,6 @@ function weightedRand(list) {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max)
-}
-
-function getNbTeamImposter(team) {
-  return team.filter((p) => p.role.type === 'Imposter').length
-}
-
-function getNumberImposter(interaction) {
-  const players = [
-    ...interaction.client.game.teamBlue,
-    ...interaction.client.game.teamRed,
-  ]
-
-  let sum = 0
-
-  players.forEach((p) => {
-    if (p.role.type === 'Imposter') sum++
-  })
-
-  return sum
 }
 
 function shuffle(a) {

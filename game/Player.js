@@ -1,9 +1,11 @@
 module.exports = class Player {
   tag = ''
+  userInstance = null
   score = 0
   role = ''
 
-  constructor(tag) {
-    this.tag = tag
+  constructor(userInstance) {
+    this.tag = userInstance.tag
+    this.userInstance = userInstance
   }
 }

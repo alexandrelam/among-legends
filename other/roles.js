@@ -31,6 +31,14 @@ const crewmateRoles = [
     weight: 0.25,
     image: 'bronze.png',
   },
+  {
+    type: 'Crewmate',
+    name: 'Canard',
+    description:
+      'Toutes les 5 minutes, suivre les ordres reçus par messages privés.',
+    weight: 1,
+    image: 'bronze.png',
+  },
 ]
 
 const imposterRoles = [
