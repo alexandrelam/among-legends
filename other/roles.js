@@ -37,7 +37,7 @@ const crewmateRoles = [
     description:
       'Toutes les 5 minutes, suivre les ordres reçus par messages privés.',
     weight: 0.1,
-    image: 'canard.png',
+    image: 'canard.jpg',
   },
   {
     type: 'Crewmate',
@@ -55,7 +55,7 @@ const imposterRoles = [
     name: 'Imposter',
     description: 'Perdre la game, sans te faire repérer!',
     weight: 1,
-    image: 'imposter.jpg',
+    image: 'imposter.png',
   },
 ]
 
