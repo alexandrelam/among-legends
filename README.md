@@ -128,9 +128,9 @@ You need the latest version of npm to run the server (>= node 16)
 
 ## Roadmap
 
-- [] Better leaderboard
-- [] Persistant database with Firebase
-- [] Bug fixes
+- [ ] Better leaderboard
+- [ ] Persistant database with Firebase
+- [ ] Bug fixes
 
 See the [open issues](https://github.com/alexandrelam/among-legends/issues) for a full list of proposed features (and known issues).
 
