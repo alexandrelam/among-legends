@@ -13,8 +13,8 @@ module.exports = {
       (p) => `${p.tag} - ${p.score}`
     )
 
-    bluePlayers.sort((a, b) => (a.score > b.score ? 1 : -1))
-    redPlayers.sort((a, b) => (a.score > b.score ? 1 : -1))
+    bluePlayers.sort((a, b) => (a.score > b.score ? -1 : 1))
+    redPlayers.sort((a, b) => (a.score > b.score ? -1 : 1))
 
     var embeds = []
 
