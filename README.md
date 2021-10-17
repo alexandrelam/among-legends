@@ -167,6 +167,8 @@ Distributed under the GPL-3.0 License. See `LICENSE.txt` for more information.
 
 Alexandre LAM - alexandrelam@outlook.com
 
+Victor DELIEGE - victor.deliege@gmail.com
+
 Project Link: [https://github.com/alexandrelam/among-legends](https://github.com/alexandrelam/among-legends)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
