@@ -13,18 +13,33 @@ module.exports = {
       (p) => `${p.tag} - ${p.score}`
     )
 
-    const blue = new MessageEmbed()
-      .setColor('#0099ff')
-      .setTitle('Blue players')
-      .setDescription(`${bluePlayers.join('\n')}`)
+    bluePlayers.sort((a, b) => (a.score > b.score ? 1 : -1))
+    redPlayers.sort((a, b) => (a.score > b.score ? 1 : -1))
 
-    const red = new MessageEmbed()
-      .setColor('#ff0055')
-      .setTitle('Red players')
-      .setDescription(`${redPlayers.join('\n')}`)
+    var embeds = []
 
-    await interaction.reply({
-      embeds: [blue, red],
-    })
+    if (bluePlayers.length !== 0) {
+      const blue = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Blue players')
+        .setDescription(`${bluePlayers.join('\n')}`)
+      embeds.push(blue)
+    }
+
+    if (redPlayers.length !== 0) {
+      const red = new MessageEmbed()
+        .setColor('#ff0055')
+        .setTitle('Red players')
+        .setDescription(`${redPlayers.join('\n')}`)
+      embeds.push(red)
+    }
+
+    if (embeds.length === 0) {
+      await interaction.reply('No players')
+    } else {
+      await interaction.reply({
+        embeds: embeds,
+      })
+    }
   },
 }
