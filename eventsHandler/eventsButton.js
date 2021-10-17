@@ -10,25 +10,32 @@ module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return
 
   if (interaction.customId.includes('join')) {
-    const teamBlue = interaction.client.game.teamBlue
-    const teamRed = interaction.client.game.teamRed
+    if (!interaction.client.game.isPlaying) {
+      const teamBlue = interaction.client.game.teamBlue
+      const teamRed = interaction.client.game.teamRed
 
-    if (interaction.customId === 'join-blue') {
-      playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
-      attributeRoles(interaction, teamBlue)
-    }
+      if (interaction.customId === 'join-blue') {
+        playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
+        attributeRoles(interaction, teamBlue)
+      }
 
-    if (interaction.customId === 'join-red') {
-      playerJoinTeam(interaction, teamRed, teamBlue, 'red')
-      attributeRoles(interaction, teamRed)
-    }
+      if (interaction.customId === 'join-red') {
+        playerJoinTeam(interaction, teamRed, teamBlue, 'red')
+        attributeRoles(interaction, teamRed)
+      }
 
-    // set number of imposter
-    const players = [...teamBlue, ...teamRed]
-    if (players.length > 3) {
-      interaction.client.game.nbImposter = 2
+      // set number of imposter
+      const players = [...teamBlue, ...teamRed]
+      if (players.length > 3) {
+        interaction.client.game.nbImposter = 2
+      } else {
+        interaction.client.game.nbImposter = 1
+      }
     } else {
-      interaction.client.game.nbImposter = 1
+      await interaction.reply({
+        content: 'You cannot join an ongoing game!',
+        ephemeral: true,
+      })
     }
   }
 
@@ -47,7 +54,7 @@ module.exports.handleButton = async (interaction) => {
       })
     } else {
       await interaction.reply({
-        content: 'You did not joined the game!',
+        content: 'You did not join the game!',
         ephemeral: true,
       })
     }

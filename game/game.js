@@ -1,4 +1,6 @@
 module.exports = {
+  isPlaying: false,
+  isVoting: false,
   isTwoTeam: false,
   teamBlue: [],
   teamRed: [],

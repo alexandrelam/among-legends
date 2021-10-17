@@ -6,23 +6,30 @@ module.exports = {
     .setName('join')
     .setDescription('Make players join for the game!'),
   async execute(interaction) {
-    const blue = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setCustomId('join-blue')
-        .setLabel('Join blue team')
-        .setStyle('PRIMARY')
-    )
+    if (!interaction.client.game.isPlaying) {
+      const blue = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setCustomId('join-blue')
+          .setLabel('Join blue team')
+          .setStyle('PRIMARY')
+      )
 
-    const red = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setCustomId('join-red')
-        .setLabel('Join red team')
-        .setStyle('DANGER')
-    )
+      const red = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setCustomId('join-red')
+          .setLabel('Join red team')
+          .setStyle('DANGER')
+      )
 
-    await interaction.reply({
-      content: 'Click the button to join the game',
-      components: [blue, red],
-    })
+      await interaction.reply({
+        content: 'Click the button to join the game',
+        components: [blue, red],
+      })
+    } else {
+      await interaction.reply({
+        content: 'You cannot join an ongoing game',
+        ephemeral: true,
+      })
+    }
   },
 }

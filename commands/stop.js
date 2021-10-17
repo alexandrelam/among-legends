@@ -6,6 +6,7 @@ module.exports = {
     .setName('stop')
     .setDescription('Stop the game'),
   async execute(interaction) {
+    interaction.client.game.isPlaying = false
     stopOrderPlayers(interaction.client.game.intervalIds)
     interaction.reply('Game has stopped')
   },
