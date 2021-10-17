@@ -6,8 +6,18 @@ module.exports = {
     .setName('start')
     .setDescription('Starts the game'),
   async execute(interaction) {
-    interaction.client.game.intervalIds = initOrderPlayers(interaction)
+    const players = [
+      ...interaction.client.game.teamBlue,
+      ...interaction.client.game.teamRed,
+    ]
+    if (!interaction.client.game.isPlaying && players.length !== 0) {
+      interaction.client.game.isPlaying = true
+      interaction.client.game.isVoting = false
+      interaction.client.game.intervalIds = initOrderPlayers(interaction)
 
-    interaction.reply('Game has started!')
+      interaction.reply('Game has started!')
+    } else {
+      interaction.reply('Cannot start game')
+    }
   },
 }

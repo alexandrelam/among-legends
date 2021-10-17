@@ -2,7 +2,7 @@ const { getCurrentPlayer } = require('./helpers')
 
 function givePoint(curr_player, voted_player) {
   if (voted_player.role.type === 'Imposter') {
-    curr_player.score++
+    if (curr_player) curr_player.score++
   }
 }
 
