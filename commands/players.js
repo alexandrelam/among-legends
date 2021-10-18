@@ -15,17 +15,25 @@ module.exports = {
 
     let blueTags = [],
       blueScore = [],
+      blueRank = [],
       redTags = [],
-      redScore = []
+      redScore = [],
+      redRank = []
 
     if (bluePlayers.length) {
       blueTags = bluePlayers.map((p) => p.tag.split('#')[0])
       blueScore = bluePlayers.map((p) => p.score)
+      for (let i = 0; i < blueTags.length; i++) {
+        blueRank.push(i + 1)
+      }
     }
 
     if (redPlayers.length) {
       redTags = redPlayers.map((p) => p.tag.split('#')[0])
       redScore = redPlayers.map((p) => p.score)
+      for (let i = 0; i < redTags.length; i++) {
+        redRank.push(i + 1)
+      }
     }
 
     var embeds = []
@@ -33,9 +41,12 @@ module.exports = {
     if (bluePlayers.length !== 0) {
       const blue = new MessageEmbed()
         .setColor('#0099ff')
-        .setAuthor('Alexandre', getImageUrl('faker.jpg'))
-        .setTitle('Blue players')
+        .setAuthor(
+          'Leaderboard',
+          'https://raw.githubusercontent.com/alexandrelam/among-legends/main/assets/trophy.png'
+        )
         .addFields(
+          { name: 'Rank', value: blueRank.join('\n'), inline: true },
           { name: 'Tag', value: blueTags.join('\n'), inline: true },
           { name: 'Score', value: blueScore.join('\n'), inline: true }
         )
@@ -45,10 +56,14 @@ module.exports = {
     if (redPlayers.length !== 0) {
       const red = new MessageEmbed()
         .setColor('#ff0055')
-        .setTitle('Red players')
+        .setAuthor(
+          'Leaderboard',
+          'https://raw.githubusercontent.com/alexandrelam/among-legends/main/assets/trophy.png'
+        )
         .addFields(
-          { name: 'Tag', value: blueTags.join('\n'), inline: true },
-          { name: 'Score', value: blueScore.join('\n'), inline: true }
+          { name: 'Rank', value: redRank.join('\n'), inline: true },
+          { name: 'Tag', value: redTags.join('\n'), inline: true },
+          { name: 'Score', value: redScore.join('\n'), inline: true }
         )
       embeds.push(red)
     }
