@@ -1,20 +1,21 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageSelectMenu } = require('discord.js')
+const { getCurrentPlayer } = require('../utils/helpers')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('vote')
     .setDescription('Vote for the player you think is the imposter'),
   async execute(interaction) {
-    //todo: Faire qu'on ne puisse voter qu'une fois et pas soi-même
-    //todo2: Faire apparaitre le scoreboard une fois que tt le monde a voté
     if (interaction.client.game.isVoting) {
-      const players = [
-        ...interaction.client.game.teamBlue,
-        ...interaction.client.game.teamRed,
-      ]
+      const curr_player = getCurrentPlayer(interaction)
+      const team = interaction.client.game.teamBlue.some(
+        (p) => p.tag === curr_player.tag
+      )
+        ? interaction.client.game.teamBlue
+        : interaction.client.game.teamRed
 
-      let choices = players.map((p) => ({ label: p.tag, value: p.tag }))
+      let choices = team.map((p) => ({ label: p.tag, value: p.tag }))
       choices.push({ label: 'Nobody', value: 'nobody' })
 
       const row = new MessageActionRow().addComponents(
