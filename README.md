@@ -26,7 +26,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="https://raw.githubusercontent.com/alexandrelam/among-legends/readme/assets/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://raw.githubusercontent.com/alexandrelam/among-legends/main/assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Among Legends</h3>
@@ -173,7 +173,6 @@ Project Link: [https://github.com/alexandrelam/among-legends](https://github.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
@@ -186,4 +185,4 @@ Project Link: [https://github.com/alexandrelam/among-legends](https://github.com
 [issues-shield]: https://img.shields.io/github/issues/alexandrelam/among-legends.svg?style=for-the-badge
 [issues-url]: https://github.com/alexandrelam/among-legends/issues
 [license-shield]: https://img.shields.io/github/license/alexandrelam/among-legends.svg?style=for-the-badge
-[license-url]: https://github.com/alexandrelam/among-legends/blob/main/LICENSE 
+[license-url]: https://github.com/alexandrelam/among-legends/blob/main/LICENSE
