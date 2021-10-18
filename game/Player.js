@@ -4,6 +4,7 @@ module.exports = class Player {
   score = 0
   role = ''
   hasVoted = false
+  orders = []
 
   constructor(userInstance) {
     this.tag = userInstance.tag
