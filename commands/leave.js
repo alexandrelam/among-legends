@@ -8,14 +8,13 @@ module.exports = {
     .setDescription('Leave the game!'),
   async execute(interaction) {
     if (!interaction.client.game.isPlaying) {
-      const players = [
-        ...interaction.client.game.teamBlue,
-        ...interaction.client.game.teamRed,
-      ]
-      const curr_player = getCurrentPlayer(interaction)
-      if (curr_player && players.some((p) => p.tag === curr_player.tag)) {
         const teamBlue = interaction.client.game.teamBlue
         const teamRed = interaction.client.game.teamRed
+        
+        const players = [...teamBlue, ...teamRed]
+        const curr_player = getCurrentPlayer(interaction)
+        
+        if (curr_player && players.some((p) => p.tag === curr_player.tag)) {
 
         if (teamBlue.some((p) => p.tag === curr_player.tag)) {
           interaction.client.game.teamBlue = teamBlue.filter(
