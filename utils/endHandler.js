@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const { getChannel } = require('./helpers')
 
 function handleEndingGame(winningTeam, losingTeam) {
   winningTeam.forEach((p) => {
@@ -14,7 +15,7 @@ function handleEndingGame(winningTeam, losingTeam) {
 }
 
 function revealRoles(interaction, team) {
-  const channel = interaction.client.channels.cache.get(interaction.channelId)
+  const channel = getChannel(interaction)
 
   if (channel) {
     const isBlueTeam = team === interaction.client.game.teamBlue

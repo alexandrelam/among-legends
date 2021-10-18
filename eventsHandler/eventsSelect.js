@@ -1,6 +1,10 @@
 const { handleVoteImposter } = require('../utils/voteHandler')
 const { revealRoles } = require('../utils/endHandler')
-const { getCurrentPlayer } = require('../utils/helpers')
+const {
+  getCurrentPlayer,
+  getLeaderboard,
+  getChannel,
+} = require('../utils/helpers')
 
 module.exports.handleSelect = async (interaction) => {
   if (!interaction.isSelectMenu()) return
@@ -15,8 +19,11 @@ module.exports.handleSelect = async (interaction) => {
     if (!curr_player.hasVoted) handleVoteImposter(interaction, curr_player)
     teams.forEach((arr) => {
       if (arr.length && !arr.some((p) => !p.hasVoted)) {
-        revealRoles(interaction, arr)
         interaction.client.game.isVoting = false
+        revealRoles(interaction, arr)
+        const embeds = getLeaderboard(interaction)
+        const channel = getChannel(interaction)
+        if (channel) channel.send({ embeds: embeds })
       }
     })
   }
