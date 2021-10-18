@@ -10,7 +10,11 @@ module.exports = {
       ...interaction.client.game.teamBlue,
       ...interaction.client.game.teamRed,
     ]
-    if (!interaction.client.game.isPlaying && players.length !== 0) {
+    if (
+      !interaction.client.game.isPlaying &&
+      !interaction.client.game.isVoting &&
+      players.length !== 0
+    ) {
       interaction.client.game.isPlaying = true
       interaction.client.game.isVoting = false
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
