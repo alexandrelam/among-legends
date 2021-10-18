@@ -34,41 +34,9 @@ module.exports = {
 
       handleEndingGame(winningTeam, losingTeam)
 
-      const bluePlayers = interaction.client.game.teamBlue.map(
-        (p) =>
-          `${p.tag} - ${p.role.type} - ${p.role.name} : ${p.role.description}`
-      )
-      const redPlayers = interaction.client.game.teamRed.map(
-        (p) =>
-          `${p.tag} - ${p.role.type} - ${p.role.name} : ${p.role.description}`
-      )
-
-      var embeds = []
-
-      if (bluePlayers.length !== 0) {
-        const blue = new MessageEmbed()
-          .setColor('#0099ff')
-          .setTitle('Blue players')
-          .setDescription(`${bluePlayers.join('\n')}`)
-        embeds.push(blue)
-      }
-
-      if (redPlayers.length !== 0) {
-        const red = new MessageEmbed()
-          .setColor('#ff0055')
-          .setTitle('Red players')
-          .setDescription(`${redPlayers.join('\n')}`)
-        embeds.push(red)
-      }
-
-      if (embeds.length === 0) {
-        await interaction.reply('No players')
-      } else {
-        await interaction.reply({
-          content: `${team} team has won the game`,
-          embeds: embeds,
-        })
-      }
+      interaction.reply({
+        content: `${team} team has won the game`,
+      })
     } else {
       await interaction.reply({
         content: 'There is no game to end',

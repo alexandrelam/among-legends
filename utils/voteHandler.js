@@ -1,13 +1,11 @@
-const { getCurrentPlayer } = require('./helpers')
-
 function givePoint(curr_player, voted_player) {
   if (voted_player.role.type === 'Imposter') {
     if (curr_player) curr_player.score++
   }
 }
 
-function handleVoteImposter(interaction) {
-  const player = getCurrentPlayer(interaction)
+function handleVoteImposter(interaction, player) {
+  player.hasVoted = true
 
   if (interaction.values[0] === 'nobody') {
     if (
