@@ -22,27 +22,27 @@ module.exports.handleSelect = async (interaction) => {
     const channel = getChannel(interaction)
 
     if (
-      blueTeam.length &&
       !blueTeam.some((p) => !p.hasVoted) &&
       interaction.client.game.isBlueVoting
     ) {
       interaction.client.game.isBlueVoting = false
-
-      revealRoles(interaction, blueTeam)
-      const embed = getLeaderboard(interaction, blueTeam)
-      if (channel) channel.send({ embeds: [embed] })
+      if (blueTeam.length) {
+        revealRoles(interaction, blueTeam)
+        const embed = getLeaderboard(interaction, blueTeam)
+        if (channel) channel.send({ embeds: [embed] })
+      }
     }
 
     if (
-      redTeam.length &&
       !redTeam.some((p) => !p.hasVoted) &&
       interaction.client.game.isRedVoting
     ) {
       interaction.client.game.isRedVoting = false
-
-      revealRoles(interaction, redTeam)
-      const embed = getLeaderboard(interaction, redTeam)
-      if (channel) channel.send({ embeds: [embed] })
+      if (redTeam.length) {
+        revealRoles(interaction, redTeam)
+        const embed = getLeaderboard(interaction, redTeam)
+        if (channel) channel.send({ embeds: [embed] })
+      }
     }
   }
 }
