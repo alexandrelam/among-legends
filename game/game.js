@@ -1,7 +1,7 @@
 module.exports = {
   isPlaying: false,
-  isVoting: false,
-  isTwoTeam: false,
+  isBlueVoting: false,
+  isRedVoting: false,
   teamBlue: [],
   teamRed: [],
   nbImposter: 1,

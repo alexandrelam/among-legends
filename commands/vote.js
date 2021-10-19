@@ -7,7 +7,10 @@ module.exports = {
     .setName('vote')
     .setDescription('Vote for the player you think is the imposter'),
   async execute(interaction) {
-    if (interaction.client.game.isVoting) {
+    if (
+      interaction.client.game.isBlueVoting ||
+      interaction.client.game.isRedVoting
+    ) {
       const curr_player = getCurrentPlayer(interaction)
       const team = interaction.client.game.teamBlue.some(
         (p) => p.tag === curr_player.tag
