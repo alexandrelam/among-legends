@@ -4,12 +4,12 @@ function givePoint(curr_player, voted_player) {
   }
 }
 
-function handleVoteImposter(interaction, player) {
+function handleVoteImposter(interaction, player, team) {
   player.hasVoted = true
 
   if (interaction.values[0] === 'nobody') {
     if (
-      interaction.client.game.nbImposter === 1 &&
+      team.filter((p) => p.role.type === 'Imposter').length === 1 &&
       player.role.type === 'Imposter'
     )
       player.score++

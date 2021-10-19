@@ -15,7 +15,12 @@ module.exports.handleSelect = async (interaction) => {
     const redTeam = interaction.client.game.teamRed
 
     if (curr_player && !curr_player.hasVoted) {
-      handleVoteImposter(interaction, curr_player)
+      const isBlueTeam = blueTeam.some((p) => p.tag === curr_player.tag)
+      handleVoteImposter(
+        interaction,
+        curr_player,
+        isBlueTeam ? blueTeam : redTeam
+      )
     } else {
       interaction.reply({ content: 'You cannot vote twice', ephemeral: true })
     }
