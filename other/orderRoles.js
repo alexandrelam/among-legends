@@ -20,10 +20,11 @@ const explorateurOrders = [
   'Visite la base ennemi!',
 ]
 
-function getOrders(userInstance, orders) {
+function getOrders(userInstance, orders, player) {
   return setInterval(() => {
     const randomOrder = getRandomOrder(orders)
     userInstance.send(randomOrder)
+    player.orders.push(randomOrder)
   }, 5 * 60 * 1000)
 }
 
@@ -37,10 +38,11 @@ function initOrderPlayers(interaction) {
 
   players.forEach((p) => {
     let id
+    p.orders = []
     if (p.role.name === 'Canard') {
-      id = getOrders(p.userInstance, canardOrders)
+      id = getOrders(p.userInstance, canardOrders, p)
     } else if (p.role.name === 'Explorateur') {
-      id = getOrders(p.userInstance, explorateurOrders)
+      id = getOrders(p.userInstance, explorateurOrders, p)
     }
     intervalIds.push(id)
   })

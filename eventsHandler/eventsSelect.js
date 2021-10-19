@@ -11,20 +11,38 @@ module.exports.handleSelect = async (interaction) => {
 
   if (interaction.customId === 'vote-imposter') {
     const curr_player = getCurrentPlayer(interaction)
-    const teams = [
-      interaction.client.game.teamBlue,
-      interaction.client.game.teamRed,
-    ]
+    const blueTeam = interaction.client.game.teamBlue
+    const redTeam = interaction.client.game.teamRed
 
-    if (!curr_player.hasVoted) handleVoteImposter(interaction, curr_player)
-    teams.forEach((arr) => {
-      if (arr.length && !arr.some((p) => !p.hasVoted)) {
-        interaction.client.game.isVoting = false
-        revealRoles(interaction, arr)
-        const embeds = getLeaderboard(interaction)
-        const channel = getChannel(interaction)
-        if (channel) channel.send({ embeds: embeds })
+    if (curr_player && !curr_player.hasVoted) {
+      handleVoteImposter(interaction, curr_player)
+    } else {
+      interaction.reply({ content: 'You cannot vote twice', ephemeral: true })
+    }
+    const channel = getChannel(interaction)
+
+    if (
+      !blueTeam.some((p) => !p.hasVoted) &&
+      interaction.client.game.isBlueVoting
+    ) {
+      interaction.client.game.isBlueVoting = false
+      if (blueTeam.length) {
+        revealRoles(interaction, blueTeam)
+        const embed = getLeaderboard(interaction, blueTeam)
+        if (channel) channel.send({ embeds: [embed] })
       }
-    })
+    }
+
+    if (
+      !redTeam.some((p) => !p.hasVoted) &&
+      interaction.client.game.isRedVoting
+    ) {
+      interaction.client.game.isRedVoting = false
+      if (redTeam.length) {
+        revealRoles(interaction, redTeam)
+        const embed = getLeaderboard(interaction, redTeam)
+        if (channel) channel.send({ embeds: [embed] })
+      }
+    }
   }
 }

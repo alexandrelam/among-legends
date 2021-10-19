@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { stopOrderPlayers } = require('../other/orderRoles')
 const { handleEndingGame } = require('../utils/endHandler')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,7 +17,8 @@ module.exports = {
   async execute(interaction) {
     if (interaction.client.game.isPlaying) {
       interaction.client.game.isPlaying = false
-      interaction.client.game.isVoting = true
+      interaction.client.game.isBlueVoting = true
+      interaction.client.game.isRedVoting = true
 
       stopOrderPlayers(interaction.client.game.intervalIds)
 

@@ -12,11 +12,13 @@ module.exports = {
     ]
     if (
       !interaction.client.game.isPlaying &&
-      !interaction.client.game.isVoting &&
+      !interaction.client.game.isBlueVoting &&
+      !interaction.client.game.isRedVoting &&
       players.length !== 0
     ) {
       interaction.client.game.isPlaying = true
-      interaction.client.game.isVoting = false
+      interaction.client.game.isBlueVoting = false
+      interaction.client.game.isRedVoting = false
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
 
       interaction.reply('Game has started!')

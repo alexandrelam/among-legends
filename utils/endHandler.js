@@ -20,31 +20,27 @@ function revealRoles(interaction, team) {
   if (channel) {
     const isBlueTeam = team === interaction.client.game.teamBlue
 
-    var tags = [],
-      roleNames = [],
-      roleDescriptions = []
-
     if (team.length) {
-      tags = team.map((p) => p.tag.split('#')[0])
-      roleNames = team.map((p) => p.role.name)
-      roleDescriptions = team.map((p) => p.role.description)
-
-      const embed = new MessageEmbed()
-        .setColor(isBlueTeam ? '#0099ff' : '#ff0055')
-        .setAuthor(
-          isBlueTeam ? 'Blue players roles' : 'Red players roles',
-          'https://raw.githubusercontent.com/alexandrelam/among-legends/main/assets/role.png'
-        )
-        .addFields(
-          { name: 'Tag', value: tags.join('\n'), inline: true },
-          { name: 'Role', value: roleNames.join('\n'), inline: true },
-          {
-            name: 'Description',
-            value: roleDescriptions.join('\n'),
-            inline: true,
-          }
-        )
-      channel.send({ embeds: [embed] })
+      const embeds = []
+      team.forEach((p) => {
+        var embed = new MessageEmbed()
+          .setColor(isBlueTeam ? '#0099ff' : '#ff0055')
+          .setAuthor(
+            p.tag.split('#')[0],
+            `https://cdn.discordapp.com/avatars/${p.userInstance.id}/${p.userInstance.avatar}.png`
+          )
+          .addFields(
+            { name: 'Role', value: p.role.name, inline: true },
+            {
+              name: 'Description',
+              value: p.role.description,
+              inline: true,
+            }
+          )
+        if (p.orders.length) embed.addField('Orders', p.orders.join('\n'))
+        embeds.push(embed)
+      })
+      channel.send({ embeds: embeds })
     }
   }
 }
