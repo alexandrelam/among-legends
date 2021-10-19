@@ -14,22 +14,31 @@ module.exports.handleButton = async (interaction) => {
       const teamBlue = interaction.client.game.teamBlue
       const teamRed = interaction.client.game.teamRed
 
-      if (interaction.customId === 'join-blue') {
+      if (
+        interaction.customId === 'join-blue' &&
+        !interaction.client.game.isBlueVoting
+      ) {
         playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
         attributeRoles(interaction, teamBlue)
       }
 
-      if (interaction.customId === 'join-red') {
+      if (
+        interaction.customId === 'join-red' &&
+        !interaction.client.game.isRedVoting
+      ) {
         playerJoinTeam(interaction, teamRed, teamBlue, 'red')
         attributeRoles(interaction, teamRed)
       }
 
-      // set number of imposter
-      const players = [...teamBlue, ...teamRed]
-      if (players.length > 3) {
-        interaction.client.game.nbImposter = 2
+      if (teamBlue.length > 3) {
+        interaction.client.game.maxBlueImposterCount = 2
       } else {
-        interaction.client.game.nbImposter = 1
+        interaction.client.game.maxBlueImposterCount = 1
+      }
+      if (teamRed.length > 3) {
+        interaction.client.game.maxRedImposterCount = 2
+      } else {
+        interaction.client.game.maxRedImposterCount = 1
       }
     } else {
       await interaction.reply({

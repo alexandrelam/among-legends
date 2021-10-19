@@ -4,6 +4,7 @@ module.exports = {
   isRedVoting: false,
   teamBlue: [],
   teamRed: [],
-  nbImposter: 1,
+  maxBlueImposterCount: 1,
+  maxRedImposterCount: 1,
   intervalIds: [], // Need this to stop setInterval at the end of the game
 }

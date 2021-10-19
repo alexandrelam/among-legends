@@ -43,7 +43,13 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 
 function attributeRoles(interaction, team) {
   var mapped_roles = []
-  const imposter_count = getRandomInt(interaction.client.game.nbImposter) + 1
+  const isBlueTeam = team === interaction.client.game.teamBlue
+  const imposter_count =
+    getRandomInt(
+      isBlueTeam
+        ? interaction.client.game.maxBlueImposterCount
+        : interaction.client.game.maxRedImposterCount
+    ) + 1
 
   for (let i = 0; i < imposter_count; i++) {
     //Push imposters
