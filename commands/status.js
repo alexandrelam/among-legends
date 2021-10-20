@@ -4,7 +4,7 @@ module.exports = {
     .setName('status')
     .setDescription('Display game status'),
   async execute(interaction) {
-    if (interaction.client.game.isGameStart)
+    if (interaction.client.game.isPlaying)
       await interaction.reply('Game has started')
     else await interaction.reply('Game is stopped')
   },
