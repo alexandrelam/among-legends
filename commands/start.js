@@ -21,6 +21,11 @@ module.exports = {
       interaction.client.game.isRedVoting = false
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
 
+      players.forEach((p) => {
+        p.hasVoted = false
+        p.votedPlayers = null
+      })
+
       interaction.reply('Game has started!')
     } else {
       interaction.reply('Cannot start game')

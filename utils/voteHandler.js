@@ -24,6 +24,7 @@ function handleVoteImposter(interaction, player, team) {
   players.forEach((p) => {
     if (interaction.values[0] === p.tag) {
       givePoint(player, p)
+      player.votedPlayer = p
       interaction.reply({
         content: `You voted for ${p.tag}`,
         ephemeral: true,
@@ -32,4 +33,13 @@ function handleVoteImposter(interaction, player, team) {
   })
 }
 
-module.exports = { handleVoteImposter }
+function handleVoteMajority(team) {
+  const imposters = team.filter(
+    (p) => p.votedPlayer && p.votedPlayer.role.type === 'Imposter'
+  )
+  if (team.length / 2 < imposters.length) {
+    imposters.forEach((p) => p.score--)
+  }
+}
+
+module.exports = { handleVoteImposter, handleVoteMajority }

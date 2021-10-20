@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const { getChannel } = require('./helpers')
 
 function handleEndingGame(winningTeam, losingTeam) {
   winningTeam.forEach((p) => {
