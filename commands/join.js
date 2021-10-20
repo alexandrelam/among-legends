@@ -31,7 +31,7 @@ module.exports = {
       const embeds = []
       if (teamBlueEmbed) embeds.push(teamBlueEmbed)
       if (teamRedEmbed) embeds.push(teamRedEmbed)
-      console.log(row)
+
       if (embeds.length) {
         await interaction.reply({
           components: [row],
