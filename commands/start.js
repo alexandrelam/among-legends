@@ -23,7 +23,7 @@ module.exports = {
 
       players.forEach((p) => {
         p.hasVoted = false
-        p.votedPlayers = null
+        p.votedPlayer = null
       })
 
       interaction.reply('Game has started!')
