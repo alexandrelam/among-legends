@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageSelectMenu } = require('discord.js')
-const { getCurrentPlayer } = require('../utils/helpers')
+const { getCurrentPlayer, getChannel } = require('../utils/helpers')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,25 +12,33 @@ module.exports = {
       interaction.client.game.isRedVoting
     ) {
       const curr_player = getCurrentPlayer(interaction)
-      const team = interaction.client.game.teamBlue.some(
-        (p) => p.tag === curr_player.tag
-      )
-        ? interaction.client.game.teamBlue
-        : interaction.client.game.teamRed
+      const teamBlue = interaction.client.game.teamBlue
+      interaction.client.game.channel = getChannel(interaction)
 
-      let choices = team.map((p) => ({ label: p.tag, value: p.tag }))
-      choices.push({ label: 'Nobody', value: 'nobody' })
+      teamBlue.forEach((p) => {
+        let choices = teamBlue
+          .filter((player) => player.tag !== curr_player.tag)
+          .map((player) => ({
+            label: player.tag,
+            value: player.tag,
+          }))
+        choices.push({ label: 'Nobody', value: 'nobody' })
 
-      const row = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('vote-imposter')
-          .setPlaceholder('Select someone')
-          .addOptions(choices)
-      )
+        p.userInstance.send({
+          content: 'Vote for the player you think is the imposter!',
+          components: [
+            new MessageActionRow().addComponents(
+              new MessageSelectMenu()
+                .setCustomId('vote-imposter')
+                .setPlaceholder('Select someone')
+                .addOptions(choices)
+            ),
+          ],
+        })
+      })
 
       await interaction.reply({
-        content: 'Vote for the player you think is the imposter!',
-        components: [row],
+        content: 'Vote for the player you think is the imposter in DM!',
       })
     } else {
       await interaction.reply({

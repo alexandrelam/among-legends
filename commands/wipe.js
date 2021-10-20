@@ -12,6 +12,7 @@ module.exports = {
     interaction.client.game.maxBlueImposterCount = 1
     interaction.client.game.maxRedImposterCount = 1
     interaction.client.game.intervalIds = []
+    interaction.client.game.channel = undefined
     interaction.reply('Boom, big reset!')
   },
 }
