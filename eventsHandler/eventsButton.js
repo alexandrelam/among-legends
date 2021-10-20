@@ -3,6 +3,7 @@ const {
   attributeRoles,
   getImageUrl,
   getCurrentPlayer,
+  getLeaderboard,
 } = require('../utils/helpers')
 const { MessageEmbed } = require('discord.js')
 
@@ -13,6 +14,7 @@ module.exports.handleButton = async (interaction) => {
     if (!interaction.client.game.isPlaying) {
       const teamBlue = interaction.client.game.teamBlue
       const teamRed = interaction.client.game.teamRed
+      const embeds = []
 
       if (
         interaction.customId === 'join-blue' &&
@@ -20,6 +22,19 @@ module.exports.handleButton = async (interaction) => {
       ) {
         playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
         attributeRoles(interaction, teamBlue)
+
+        if (interaction.client.game.joinMessage) {
+          const blue = getLeaderboard(
+            interaction,
+            interaction.client.game.teamBlue
+          )
+          const red = getLeaderboard(
+            interaction,
+            interaction.client.game.teamRed
+          )
+          if (blue) embeds.push(blue)
+          if (red) embeds.push(red)
+        }
       }
 
       if (
@@ -28,6 +43,24 @@ module.exports.handleButton = async (interaction) => {
       ) {
         playerJoinTeam(interaction, teamRed, teamBlue, 'red')
         attributeRoles(interaction, teamRed)
+
+        if (interaction.client.game.joinMessage) {
+          const blue = getLeaderboard(
+            interaction,
+            interaction.client.game.teamBlue
+          )
+          const red = getLeaderboard(
+            interaction,
+            interaction.client.game.teamRed
+          )
+          if (blue) embeds.push(blue)
+          if (red) embeds.push(red)
+        }
+      }
+      if (embeds.length) {
+        interaction.client.game.joinMessage.edit({
+          embeds: embeds,
+        })
       }
 
       if (teamBlue.length > 3) {
