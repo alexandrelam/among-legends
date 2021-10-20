@@ -44,25 +44,32 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 function attributeRoles(interaction, team) {
   var mapped_roles = []
   const isBlueTeam = team === interaction.client.game.teamBlue
-  const imposter_count =
-    getRandomInt(
-      isBlueTeam
-        ? interaction.client.game.maxBlueImposterCount
-        : interaction.client.game.maxRedImposterCount
-    ) + 1
+  const isAllSameRoles = getRandomInt(5) === 0
+  if (isAllSameRoles) {
+    const isAllCrewmate = getRandomInt(2) === 0
+    const sameRole = weightedRand(isAllCrewmate ? crewmateRoles : imposterRoles)
+    team.forEach((p) => (p.role = sameRole))
+  } else {
+    const imposter_count =
+      getRandomInt(
+        isBlueTeam
+          ? interaction.client.game.maxBlueImposterCount
+          : interaction.client.game.maxRedImposterCount
+      ) + 1
 
-  for (let i = 0; i < imposter_count; i++) {
-    //Push imposters
-    mapped_roles.push(weightedRand(imposterRoles))
-  }
+    for (let i = 0; i < imposter_count; i++) {
+      //Push imposters
+      mapped_roles.push(weightedRand(imposterRoles))
+    }
 
-  while (mapped_roles.length < team.length) {
-    //Fill with random roles
-    mapped_roles.push(weightedRand(crewmateRoles))
-  }
-  shuffle(mapped_roles)
-  for (let j = 0; j < mapped_roles.length; j++) {
-    team[j].role = mapped_roles[j]
+    while (mapped_roles.length < team.length) {
+      //Fill with random roles
+      mapped_roles.push(weightedRand(crewmateRoles))
+    }
+    shuffle(mapped_roles)
+    for (let j = 0; j < mapped_roles.length; j++) {
+      team[j].role = mapped_roles[j]
+    }
   }
 }
 
