@@ -34,10 +34,11 @@ function handleVoteImposter(interaction, player, team) {
 }
 
 function handleVoteMajority(team) {
-  const imposters = team.filter(
+  const votedImposters = team.filter(
     (p) => p.votedPlayer && p.votedPlayer.role.type === 'Imposter'
   )
-  if (team.length / 2 < imposters.length) {
+  const imposters = team.filter((p) => p.role.type === 'Imposter')
+  if (team.length / 2 < votedImposters.length) {
     imposters.forEach((p) => p.score--)
   }
 }
