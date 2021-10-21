@@ -6,6 +6,6 @@ module.exports = {
   teamRed: [],
   maxBlueImposterCount: 1,
   maxRedImposterCount: 1,
-  channel: undefined,
+  channel: null,
   intervalIds: [], // Need this to stop setInterval at the end of the game
 }
