@@ -22,7 +22,8 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
     team.push(newPlayer)
 
     interaction.reply({
-      content: `${playerTag} switched to ${teamLabel} team`,
+      content: `You switched to ${teamLabel} team`,
+      ephemeral: true,
     })
 
     // if player is not already in team add him
@@ -30,13 +31,15 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
     team.push(newPlayer)
 
     interaction.reply({
-      content: `${playerTag} joined ${teamLabel} team`,
+      content: `You joined ${teamLabel} team`,
+      ephemeral: true,
     })
 
     // if player is already in team don't add him
   } else {
     interaction.reply({
-      content: `${playerTag} is already in ${teamLabel} team`,
+      content: `You already are in ${teamLabel} team`,
+      ephemeral: true,
     })
   }
 }
