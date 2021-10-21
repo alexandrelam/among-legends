@@ -7,5 +7,5 @@ module.exports = {
   maxBlueImposterCount: 1,
   maxRedImposterCount: 1,
   intervalIds: [], // Need this to stop setInterval at the end of the game
-  joinMessage: undefined,
+  joinMessage: null,
 }
