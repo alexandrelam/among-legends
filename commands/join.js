@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageButton } = require('discord.js')
+const { getJoinEmbed } = require('../other/embedHelper')
 const { getLeaderboard } = require('../utils/helpers')
 
 module.exports = {
@@ -19,18 +20,10 @@ module.exports = {
           .setStyle('DANGER'),
       ])
 
-      const teamBlueEmbed = getLeaderboard(
-        interaction,
-        interaction.client.game.teamBlue
-      )
-      const teamRedEmbed = getLeaderboard(
-        interaction,
+      const embeds = getJoinEmbed(
+        interaction.client.game.teamBlue,
         interaction.client.game.teamRed
       )
-
-      const embeds = []
-      if (teamBlueEmbed) embeds.push(teamBlueEmbed)
-      if (teamRedEmbed) embeds.push(teamRedEmbed)
 
       if (embeds.length) {
         await interaction.reply({

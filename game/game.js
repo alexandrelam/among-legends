@@ -9,4 +9,5 @@ module.exports = {
   channel: null,
   intervalIds: [], // Need this to stop setInterval at the end of the game
   joinMessage: null,
+  voteMessage: null,
 }
