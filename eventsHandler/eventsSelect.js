@@ -1,10 +1,9 @@
-const { handleVoteImposter } = require('../utils/voteHandler')
-const { revealRoles } = require('../utils/endHandler')
 const {
-  getCurrentPlayer,
-  getLeaderboard,
-  getChannel,
-} = require('../utils/helpers')
+  handleVoteImposter,
+  handleVoteMajority,
+} = require('../utils/voteHandler')
+const { revealRoles } = require('../utils/endHandler')
+const { getCurrentPlayer, getLeaderboard } = require('../utils/helpers')
 
 module.exports.handleSelect = async (interaction) => {
   if (!interaction.isSelectMenu()) return
@@ -24,7 +23,7 @@ module.exports.handleSelect = async (interaction) => {
     } else {
       interaction.reply({ content: 'You cannot vote twice', ephemeral: true })
     }
-    const channel = getChannel(interaction)
+    const channel = interaction.client.game.channel
 
     if (
       !blueTeam.some((p) => !p.hasVoted) &&
@@ -32,7 +31,8 @@ module.exports.handleSelect = async (interaction) => {
     ) {
       interaction.client.game.isBlueVoting = false
       if (blueTeam.length) {
-        revealRoles(interaction, blueTeam)
+        revealRoles(interaction, blueTeam, channel)
+        handleVoteMajority(blueTeam)
         const embed = getLeaderboard(interaction, blueTeam)
         if (channel) channel.send({ embeds: [embed] })
       }
@@ -44,7 +44,8 @@ module.exports.handleSelect = async (interaction) => {
     ) {
       interaction.client.game.isRedVoting = false
       if (redTeam.length) {
-        revealRoles(interaction, redTeam)
+        revealRoles(interaction, redTeam, channel)
+        handleVoteMajority(redTeam)
         const embed = getLeaderboard(interaction, redTeam)
         if (channel) channel.send({ embeds: [embed] })
       }
