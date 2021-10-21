@@ -3,9 +3,9 @@ const {
   attributeRoles,
   getImageUrl,
   getCurrentPlayer,
-  getLeaderboard,
 } = require('../utils/helpers')
 const { MessageEmbed } = require('discord.js')
+const { getJoinEmbed } = require('../other/embedHelper')
 
 module.exports.handleButton = async (interaction) => {
   if (!interaction.isButton()) return
@@ -14,7 +14,7 @@ module.exports.handleButton = async (interaction) => {
     if (!interaction.client.game.isPlaying) {
       const teamBlue = interaction.client.game.teamBlue
       const teamRed = interaction.client.game.teamRed
-      const embeds = []
+      let embeds = []
 
       if (
         interaction.customId === 'join-blue' &&
@@ -24,16 +24,10 @@ module.exports.handleButton = async (interaction) => {
         attributeRoles(interaction, teamBlue)
 
         if (interaction.client.game.joinMessage) {
-          const blue = getLeaderboard(
-            interaction,
-            interaction.client.game.teamBlue
-          )
-          const red = getLeaderboard(
-            interaction,
+          embeds = getJoinEmbed(
+            interaction.client.game.teamBlue,
             interaction.client.game.teamRed
           )
-          if (blue) embeds.push(blue)
-          if (red) embeds.push(red)
         }
       }
 
@@ -45,18 +39,13 @@ module.exports.handleButton = async (interaction) => {
         attributeRoles(interaction, teamRed)
 
         if (interaction.client.game.joinMessage) {
-          const blue = getLeaderboard(
-            interaction,
-            interaction.client.game.teamBlue
-          )
-          const red = getLeaderboard(
-            interaction,
+          embeds = getJoinEmbed(
+            interaction.client.game.teamBlue,
             interaction.client.game.teamRed
           )
-          if (blue) embeds.push(blue)
-          if (red) embeds.push(red)
         }
       }
+
       if (embeds.length) {
         interaction.client.game.joinMessage.edit({
           embeds: embeds,

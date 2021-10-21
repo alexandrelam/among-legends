@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageActionRow, MessageSelectMenu } = require('discord.js')
-const { getCurrentPlayer, getChannel } = require('../utils/helpers')
+const { getVoteEmbed } = require('../other/embedHelper')
+const { getChannel } = require('../utils/helpers')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,6 +24,7 @@ module.exports = {
             value: player.tag,
           }))
         choices.push({ label: 'Nobody', value: 'nobody' })
+        choices.push({ label: 'Everyone', value: 'everyone' })
 
         p.userInstance.send({
           content: 'Vote for the player you think is the imposter!',
@@ -45,6 +47,7 @@ module.exports = {
             value: player.tag,
           }))
         choices.push({ label: 'Nobody', value: 'nobody' })
+        choices.push({ label: 'Everyone', value: 'everyone' })
 
         p.userInstance.send({
           content: 'Vote for the player you think is the imposter!',
@@ -59,9 +62,14 @@ module.exports = {
         })
       })
 
+      const embed = getVoteEmbed(teamBlue, teamRed)
+
       await interaction.reply({
         content: 'Vote for the player you think is the imposter in DM!',
+        embeds: embed,
       })
+
+      interaction.client.game.voteMessage = await interaction.fetchReply()
     } else {
       await interaction.reply({
         content: 'You have to wait for the game to end in order to vote',

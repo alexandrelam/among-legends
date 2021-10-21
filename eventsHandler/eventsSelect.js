@@ -4,6 +4,7 @@ const {
 } = require('../utils/voteHandler')
 const { revealRoles } = require('../utils/endHandler')
 const { getCurrentPlayer, getLeaderboard } = require('../utils/helpers')
+const { getVoteEmbed } = require('../other/embedHelper')
 
 module.exports.handleSelect = async (interaction) => {
   if (!interaction.isSelectMenu()) return
@@ -20,6 +21,12 @@ module.exports.handleSelect = async (interaction) => {
         curr_player,
         isBlueTeam ? blueTeam : redTeam
       )
+      const embed = getVoteEmbed(blueTeam, redTeam)
+      if (embed.length && interaction.client.game.voteMessage) {
+        interaction.client.game.voteMessage.edit({
+          embeds: embed,
+        })
+      }
     } else {
       interaction.reply({ content: 'You cannot vote twice', ephemeral: true })
     }
@@ -49,6 +56,14 @@ module.exports.handleSelect = async (interaction) => {
         const embed = getLeaderboard(interaction, redTeam)
         if (channel) channel.send({ embeds: [embed] })
       }
+    }
+
+    if (
+      !interaction.client.game.isRedVoting &&
+      !interaction.client.game.isBlueVoting &&
+      interaction.client.game.voteMessage
+    ) {
+      interaction.client.game.voteMessage.delete()
     }
   }
 }
