@@ -15,11 +15,9 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
 
   // if player is in opposite team switch him
   if (isPlayerInTeam(playerTag, opposingTeam)) {
-    opposingTeam.splice(
-      opposingTeam.indexOf(opposingTeam.find((p) => p.tag === playerTag)),
-      1
-    )
-    team.push(newPlayer)
+    const playerToSwitch = opposingTeam.find((p) => p.tag === playerTag)
+    opposingTeam.splice(opposingTeam.indexOf(playerToSwitch), 1)
+    team.push(playerToSwitch)
 
     interaction.reply({
       content: `You switched to ${teamLabel} team`,
