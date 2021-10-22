@@ -6,6 +6,7 @@ module.exports = class Player {
   hasVoted = false
   orders = []
   votedPlayer = null
+  typeChanges = []
 
   constructor(userInstance) {
     this.tag = userInstance.tag

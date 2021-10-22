@@ -10,4 +10,6 @@ module.exports = {
   intervalIds: [], // Need this to stop setInterval at the end of the game
   joinMessage: null,
   voteMessage: null,
+  startedGameTime: null,
+  cameleonIntervals: [],
 }

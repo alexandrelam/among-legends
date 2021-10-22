@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { stopOrderPlayers } = require('../other/orderRoles')
+const { stopOrderPlayers, stopCameleonPlayers } = require('../other/orderRoles')
 const { handleEndingGame } = require('../utils/endHandler')
 
 module.exports = {
@@ -20,7 +20,9 @@ module.exports = {
       interaction.client.game.isBlueVoting = true
       interaction.client.game.isRedVoting = true
 
+      interaction.client.game.startedGameTime = null
       stopOrderPlayers(interaction.client.game.intervalIds)
+      stopCameleonPlayers(interaction.client.game.cameleonIntervals)
 
       const team = interaction.options.getString('team')
       var winningTeam, losingTeam

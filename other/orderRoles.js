@@ -1,3 +1,5 @@
+const { getRandomInt } = require('../utils/helpers')
+
 const canardOrders = [
   "Dans les 30 secondes, utilise tout ton kit de sorts! (sauf les sorts d'invocateurs)",
   'Dans les 30 secondes, utilise ton deuxième summoner spell!',
@@ -39,10 +41,16 @@ function initOrderPlayers(interaction) {
   players.forEach((p) => {
     let id
     p.orders = []
+    p.typeChanges = []
     if (p.role.name === 'Canard') {
       id = getOrders(p.userInstance, canardOrders, p)
     } else if (p.role.name === 'Explorateur') {
       id = getOrders(p.userInstance, explorateurOrders, p)
+    } else if (p.role.name === 'Cameleon') {
+      p.typeChanges.push(`Started as ${p.role.type}`)
+      interaction.client.game.cameleonIntervals.push(
+        getType(interaction, p.userInstance, p)
+      )
     }
     intervalIds.push(id)
   })
@@ -50,8 +58,63 @@ function initOrderPlayers(interaction) {
   return intervalIds
 }
 
+function getType(interaction, userInstance, player) {
+  const minute = 1000 //* 60
+  const maxElapsedMinutes = 10 * minute
+  const minElapsedMinutes = 3 * minute
+  return setRandomInterval(
+    () => {
+      const oppositeType =
+        player.role.type === 'Crewmate' ? 'Imposter' : 'Crewmate'
+      player.role.type = oppositeType
+      userInstance.send(`You are now: ${oppositeType}`)
+      const now = new Date()
+      var timeDiff = new Date(now - interaction.client.game.startedGameTime)
+      // strip the ms
+      timeDiff /= 1000
+      // get seconds
+      var seconds = Math.round(timeDiff % 60)
+      // remove seconds from the date
+      timeDiff = Math.floor(timeDiff / 60)
+      // get minutes
+      var minutes = Math.round(timeDiff % 60)
+      player.typeChanges.push(`${minutes}:${seconds} - ${oppositeType}`)
+    },
+    minElapsedMinutes,
+    maxElapsedMinutes
+  )
+}
+
+const setRandomInterval = (intervalFunction, minDelay, maxDelay) => {
+  let timeout
+
+  const runInterval = () => {
+    const timeoutFunction = () => {
+      intervalFunction()
+      runInterval()
+    }
+
+    const delay =
+      Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
+
+    timeout = setTimeout(timeoutFunction, delay)
+  }
+
+  runInterval()
+
+  return {
+    clear() {
+      clearTimeout(timeout)
+    },
+  }
+}
+
 function stopOrderPlayers(intervalIds) {
   intervalIds.forEach((id) => clearInterval(id))
+}
+
+function stopCameleonPlayers(intervals) {
+  intervals.forEach((i) => i.clear())
 }
 
 function getRandomOrder(orders) {
@@ -59,4 +122,4 @@ function getRandomOrder(orders) {
   return orders[index]
 }
 
-module.exports = { initOrderPlayers, stopOrderPlayers }
+module.exports = { initOrderPlayers, stopOrderPlayers, stopCameleonPlayers }

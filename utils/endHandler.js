@@ -35,6 +35,8 @@ function revealRoles(interaction, team, channel) {
             }
           )
         if (p.orders.length) embed.addField('Orders', p.orders.join('\n'))
+        if (p.typeChanges.length)
+          embed.addField('Side Changes', p.typeChanges.join('\n'))
         embeds.push(embed)
       })
       channel.send({ embeds: embeds })

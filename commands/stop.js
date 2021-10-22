@@ -8,6 +8,7 @@ module.exports = {
   async execute(interaction) {
     interaction.client.game.isPlaying = false
     stopOrderPlayers(interaction.client.game.intervalIds)
+    stopCameleonPlayers(interaction.client.game.cameleonIntervals)
     interaction.reply('Game has stopped')
   },
 }

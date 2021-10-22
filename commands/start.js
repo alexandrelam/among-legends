@@ -19,6 +19,7 @@ module.exports = {
       interaction.client.game.isPlaying = true
       interaction.client.game.isBlueVoting = false
       interaction.client.game.isRedVoting = false
+      interaction.client.game.startedGameTime = new Date()
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
 
       players.forEach((p) => {

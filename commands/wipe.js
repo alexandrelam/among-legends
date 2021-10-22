@@ -14,6 +14,7 @@ module.exports = {
     interaction.client.game.intervalIds = []
     interaction.client.game.channel = null
     interaction.client.game.joinMessage = null
+    interaction.client.game.startedGameTime = null
     interaction.reply('Boom, big reset!')
   },
 }

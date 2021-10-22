@@ -1,6 +1,6 @@
 const Player = require('../game/Player')
 const config = require('../config.json')
-const { crewmateRoles, imposterRoles } = require('../other/roles')
+const { crewmateRoles, imposterRoles, cameleon } = require('../other/roles')
 const { MessageEmbed } = require('discord.js')
 
 function isPlayerInTeam(playerTag, team) {
@@ -46,10 +46,20 @@ function attributeRoles(interaction, team) {
   var mapped_roles = []
   const isBlueTeam = team === interaction.client.game.teamBlue
   const isAllSameRoles = getRandomInt(5) === 0
-  if (isAllSameRoles) {
-    const isAllCrewmate = getRandomInt(2) === 0
-    const sameRole = weightedRand(isAllCrewmate ? crewmateRoles : imposterRoles)
-    team.forEach((p) => (p.role = sameRole))
+  if (/*isAllSameRoles*/ true) {
+    const isAllCameleon = getRandomInt(4) === 0
+    if (/*isAllCameleon*/ true) {
+      team.forEach((p) => {
+        p.role = cameleon
+        p.role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
+      })
+    } else {
+      const isAllCrewmate = getRandomInt(2) === 0
+      const sameRole = weightedRand(
+        isAllCrewmate ? crewmateRoles : imposterRoles
+      )
+      team.forEach((p) => (p.role = sameRole))
+    }
   } else {
     const imposter_count =
       getRandomInt(
@@ -154,4 +164,5 @@ module.exports = {
   getCurrentPlayer,
   getChannel,
   getLeaderboard,
+  getRandomInt,
 }

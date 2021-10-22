@@ -43,7 +43,7 @@ const crewmateRoles = [
     type: 'Crewmate',
     name: 'Explorateur',
     description:
-      'Toutes les 5 minutes, se rendre à la destination indiquée par message privé toutes les 5 minutes en restant vivant.',
+      'Toutes les 5 minutes, se rendre à la destination indiquée par message privé en restant vivant.',
     weight: 0.1,
     image: 'explorateur.jpg',
   },
@@ -75,4 +75,11 @@ const imposterRoles = [
   },
 ]
 
-module.exports = { crewmateRoles, imposterRoles }
+const cameleon = {
+  type: '',
+  name: 'Cameleon',
+  description: 'Gagner ou perdre la game en fonction du camps reçu en DM',
+  image: 'cameleon.jpg',
+}
+
+module.exports = { crewmateRoles, imposterRoles, cameleon }
