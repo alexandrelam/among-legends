@@ -64,21 +64,22 @@ function getType(interaction, userInstance, player) {
   const minElapsedMinutes = 3 * minute
   return setRandomInterval(
     () => {
-      const oppositeType =
+      player.role.type =
         player.role.type === 'Crewmate' ? 'Imposter' : 'Crewmate'
-      player.role.type = oppositeType
-      userInstance.send(`You are now: ${oppositeType}`)
       const now = new Date()
       var timeDiff = new Date(now - interaction.client.game.startedGameTime)
       // strip the ms
       timeDiff /= 1000
       // get seconds
-      var seconds = Math.round(timeDiff % 60)
+      var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
       // remove seconds from the date
       timeDiff = Math.floor(timeDiff / 60)
       // get minutes
-      var minutes = Math.round(timeDiff % 60)
-      player.typeChanges.push(`${minutes}:${seconds} - ${oppositeType}`)
+      var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      userInstance.send(
+        `${minutes}:${seconds} - You are now: ${player.role.type}`
+      )
+      player.typeChanges.push(`${minutes}:${seconds} - ${player.role.type}`)
     },
     minElapsedMinutes,
     maxElapsedMinutes
