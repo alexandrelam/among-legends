@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
-const { crewmateRoles, imposterRoles } = require('../other/roles')
+const { crewmateRoles, imposterRoles, cameleon } = require('../other/roles')
 const { getImageUrl } = require('../utils/helpers')
 
 module.exports = {
@@ -18,6 +18,13 @@ module.exports = {
           .setDescription(r.description)
       )
     })
+    embeds.push(
+      new MessageEmbed()
+        .setColor('#ffffff')
+        .setThumbnail(getImageUrl(cameleon.image))
+        .setTitle(cameleon.name)
+        .setDescription(cameleon.description)
+    )
     imposterRoles.forEach((r) => {
       embeds.push(
         new MessageEmbed()
