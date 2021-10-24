@@ -75,47 +75,48 @@ function initOrderPlayers(interaction) {
 }
 
 function getType(interaction, userInstance, player) {
-  const minute = 1000 //* 60
+  const minute = 1000 * 60
   const maxElapsedMinutes = 10 * minute
   const minElapsedMinutes = 3 * minute
+  const initalType = player.role.type
 
-  let interval
-  ;(function (p) {
-    interval = setRandomInterval(
-      () => {
-        p.role.type = p.role.type === 'Crewmate' ? 'Imposter' : 'Crewmate'
+  return setRandomInterval(
+    (p) => {
+      if (p.typeChanges.length % 2 === 1) {
+        p.role.type = initalType === 'Crewmate' ? 'Imposter' : 'Crewmate'
+      } else {
+        p.role.type = initalType
+      }
 
-        const now = new Date()
-        var timeDiff = new Date(now - interaction.client.game.startedGameTime)
-        timeDiff /= 1000
-        var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
-        timeDiff = Math.floor(timeDiff / 60)
-        var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      const now = new Date()
+      var timeDiff = new Date(now - interaction.client.game.startedGameTime)
+      timeDiff /= 1000
+      var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      timeDiff = Math.floor(timeDiff / 60)
+      var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
 
-        userInstance.send(`${minutes}:${seconds} - You are now: ${p.role.type}`)
-        p.typeChanges.push(`${minutes}:${seconds} - ${p.role.type}`)
-      },
-      minElapsedMinutes,
-      maxElapsedMinutes
-    )
-  })(player)
-
-  return interval
+      userInstance.send(`${minutes}:${seconds} - You are now: ${p.role.type}`)
+      p.typeChanges.push(`${minutes}:${seconds} - ${p.role.type}`)
+    },
+    minElapsedMinutes,
+    maxElapsedMinutes,
+    player
+  )
 }
 
-const setRandomInterval = (intervalFunction, minDelay, maxDelay) => {
+const setRandomInterval = (intervalFunction, minDelay, maxDelay, player) => {
   let timeout
 
   const runInterval = () => {
-    const timeoutFunction = () => {
-      intervalFunction()
+    const timeoutFunction = (p) => {
+      intervalFunction(p)
       runInterval()
     }
 
     const delay =
       Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
 
-    timeout = setTimeout(timeoutFunction, delay)
+    timeout = setTimeout(timeoutFunction, delay, player)
   }
 
   runInterval()
