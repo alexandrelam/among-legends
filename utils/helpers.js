@@ -1,6 +1,6 @@
 const Player = require('../game/Player')
 const config = require('../config.json')
-const { crewmateRoles, imposterRoles } = require('../other/roles')
+const { crewmateRoles, imposterRoles, cameleon } = require('../other/roles')
 const { MessageEmbed } = require('discord.js')
 
 function isPlayerInTeam(playerTag, team) {
@@ -42,35 +42,58 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
   }
 }
 
-function attributeRoles(interaction, team) {
-  var mapped_roles = []
-  const isBlueTeam = team === interaction.client.game.teamBlue
-  const isAllSameRoles = getRandomInt(5) === 0
-  if (isAllSameRoles) {
+function attributeSameRole(team) {
+  const isAllCameleon = getRandomInt(4) === 0
+  if (isAllCameleon) {
+    team.forEach((p) => {
+      p.role = cameleon
+      p.role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
+    })
+  } else {
     const isAllCrewmate = getRandomInt(2) === 0
     const sameRole = weightedRand(isAllCrewmate ? crewmateRoles : imposterRoles)
     team.forEach((p) => (p.role = sameRole))
+  }
+}
+function attributeDifferentRoles(interaction, team) {
+  var mapped_roles = []
+  const isBlueTeam = team === interaction.client.game.teamBlue
+  const oneCameleon = getRandomInt(3) === 0
+  let imposter_count = getRandomInt(
+    isBlueTeam
+      ? interaction.client.game.maxBlueImposterCount
+      : interaction.client.game.maxRedImposterCount
+  )
+  imposter_count += oneCameleon ? 0 : 1
+
+  if (oneCameleon) {
+    const role = cameleon
+    role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
+    mapped_roles.push(role)
+  }
+
+  for (let i = 0; i < imposter_count; i++) {
+    //Push imposters
+    mapped_roles.push(weightedRand(imposterRoles))
+  }
+
+  while (mapped_roles.length < team.length) {
+    //Fill with random roles
+    mapped_roles.push(weightedRand(crewmateRoles))
+  }
+
+  shuffle(mapped_roles)
+  for (let j = 0; j < mapped_roles.length; j++) {
+    team[j].role = mapped_roles[j]
+  }
+}
+
+function attributeRoles(interaction, team) {
+  const isAllSameRoles = getRandomInt(5) === 0
+  if (isAllSameRoles) {
+    attributeSameRole(team)
   } else {
-    const imposter_count =
-      getRandomInt(
-        isBlueTeam
-          ? interaction.client.game.maxBlueImposterCount
-          : interaction.client.game.maxRedImposterCount
-      ) + 1
-
-    for (let i = 0; i < imposter_count; i++) {
-      //Push imposters
-      mapped_roles.push(weightedRand(imposterRoles))
-    }
-
-    while (mapped_roles.length < team.length) {
-      //Fill with random roles
-      mapped_roles.push(weightedRand(crewmateRoles))
-    }
-    shuffle(mapped_roles)
-    for (let j = 0; j < mapped_roles.length; j++) {
-      team[j].role = mapped_roles[j]
-    }
+    attributeDifferentRoles(interaction, team)
   }
 }
 
@@ -154,4 +177,5 @@ module.exports = {
   getCurrentPlayer,
   getChannel,
   getLeaderboard,
+  getRandomInt,
 }

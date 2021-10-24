@@ -9,8 +9,9 @@ function handleVoteImposter(interaction, player, team) {
 
   if (interaction.values[0] === 'nobody') {
     if (
-      team.filter((p) => p.role.type === 'Imposter').length === 1 &&
-      player.role.type === 'Imposter'
+      (team.filter((p) => p.role.type === 'Imposter').length === 1 &&
+        player.role.type === 'Imposter') ||
+      team.filter((p) => p.role.type === 'Imposter').length === 0
     )
       player.score++
     interaction.reply({ content: 'You voted for nobody', ephemeral: true })

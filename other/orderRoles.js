@@ -1,3 +1,5 @@
+const { getRandomInt } = require('../utils/helpers')
+
 const canardOrders = [
   "Dans les 30 secondes, utilise tout ton kit de sorts! (sauf les sorts d'invocateurs)",
   'Dans les 30 secondes, utilise ton deuxième summoner spell!',
@@ -28,6 +30,27 @@ function getOrders(userInstance, orders, player) {
   }, 5 * 60 * 1000)
 }
 
+function initCameleonPlayers(interaction) {
+  const players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ]
+
+  let intervalIds = []
+
+  players.forEach((p) => {
+    p.typeChanges = []
+
+    if (p.role.name === 'Cameleon') {
+      p.typeChanges.push(`Started as ${p.role.type}`)
+      const id = getType(interaction, p.userInstance, p)
+      intervalIds.push(id)
+    }
+  })
+
+  return intervalIds
+}
+
 function initOrderPlayers(interaction) {
   const players = [
     ...interaction.client.game.teamBlue,
@@ -44,14 +67,73 @@ function initOrderPlayers(interaction) {
     } else if (p.role.name === 'Explorateur') {
       id = getOrders(p.userInstance, explorateurOrders, p)
     }
-    intervalIds.push(id)
+
+    if (id) intervalIds.push(id)
   })
 
   return intervalIds
 }
 
+function getType(interaction, userInstance, player) {
+  const minute = 1000 * 60
+  const maxElapsedMinutes = 10 * minute
+  const minElapsedMinutes = 3 * minute
+  const initalType = player.role.type
+
+  return setRandomInterval(
+    (p) => {
+      if (p.typeChanges.length % 2 === 1) {
+        p.role.type = initalType === 'Crewmate' ? 'Imposter' : 'Crewmate'
+      } else {
+        p.role.type = initalType
+      }
+
+      const now = new Date()
+      var timeDiff = new Date(now - interaction.client.game.startedGameTime)
+      timeDiff /= 1000
+      var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      timeDiff = Math.floor(timeDiff / 60)
+      var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
+
+      userInstance.send(`${minutes}:${seconds} - You are now: ${p.role.type}`)
+      p.typeChanges.push(`${minutes}:${seconds} - ${p.role.type}`)
+    },
+    minElapsedMinutes,
+    maxElapsedMinutes,
+    player
+  )
+}
+
+const setRandomInterval = (intervalFunction, minDelay, maxDelay, player) => {
+  let timeout
+
+  const runInterval = () => {
+    const timeoutFunction = (p) => {
+      intervalFunction(p)
+      runInterval()
+    }
+
+    const delay =
+      Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
+
+    timeout = setTimeout(timeoutFunction, delay, player)
+  }
+
+  runInterval()
+
+  return {
+    clear() {
+      clearTimeout(timeout)
+    },
+  }
+}
+
 function stopOrderPlayers(intervalIds) {
   intervalIds.forEach((id) => clearInterval(id))
+}
+
+function stopCameleonPlayers(intervals) {
+  intervals.forEach((i) => i.clear())
 }
 
 function getRandomOrder(orders) {
@@ -59,4 +141,9 @@ function getRandomOrder(orders) {
   return orders[index]
 }
 
-module.exports = { initOrderPlayers, stopOrderPlayers }
+module.exports = {
+  initOrderPlayers,
+  initCameleonPlayers,
+  stopOrderPlayers,
+  stopCameleonPlayers,
+}
