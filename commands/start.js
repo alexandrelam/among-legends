@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { initOrderPlayers } = require('../other/orderRoles')
+const { initOrderPlayers, initCameleonPlayers } = require('../other/orderRoles')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -21,6 +21,8 @@ module.exports = {
       interaction.client.game.isRedVoting = false
       interaction.client.game.startedGameTime = new Date()
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
+      interaction.client.game.cameleonIntervals =
+        initCameleonPlayers(interaction)
 
       players.forEach((p) => {
         p.hasVoted = false

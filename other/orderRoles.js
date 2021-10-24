@@ -30,6 +30,27 @@ function getOrders(userInstance, orders, player) {
   }, 5 * 60 * 1000)
 }
 
+function initCameleonPlayers(interaction) {
+  const players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ]
+
+  let intervalIds = []
+
+  players.forEach((p) => {
+    p.typeChanges = []
+
+    if (p.role.name === 'Cameleon') {
+      p.typeChanges.push(`Started as ${p.role.type}`)
+      const id = getType(interaction, p.userInstance, p)
+      intervalIds.push(id)
+    }
+  })
+
+  return intervalIds
+}
+
 function initOrderPlayers(interaction) {
   const players = [
     ...interaction.client.game.teamBlue,
@@ -41,18 +62,13 @@ function initOrderPlayers(interaction) {
   players.forEach((p) => {
     let id
     p.orders = []
-    p.typeChanges = []
     if (p.role.name === 'Canard') {
       id = getOrders(p.userInstance, canardOrders, p)
     } else if (p.role.name === 'Explorateur') {
       id = getOrders(p.userInstance, explorateurOrders, p)
-    } else if (p.role.name === 'Cameleon') {
-      p.typeChanges.push(`Started as ${p.role.type}`)
-      interaction.client.game.cameleonIntervals.push(
-        getType(interaction, p.userInstance, p)
-      )
     }
-    intervalIds.push(id)
+
+    if (id) intervalIds.push(id)
   })
 
   return intervalIds
@@ -62,28 +78,29 @@ function getType(interaction, userInstance, player) {
   const minute = 1000 //* 60
   const maxElapsedMinutes = 10 * minute
   const minElapsedMinutes = 3 * minute
-  return setRandomInterval(
-    () => {
-      player.role.type =
-        player.role.type === 'Crewmate' ? 'Imposter' : 'Crewmate'
-      const now = new Date()
-      var timeDiff = new Date(now - interaction.client.game.startedGameTime)
-      // strip the ms
-      timeDiff /= 1000
-      // get seconds
-      var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
-      // remove seconds from the date
-      timeDiff = Math.floor(timeDiff / 60)
-      // get minutes
-      var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
-      userInstance.send(
-        `${minutes}:${seconds} - You are now: ${player.role.type}`
-      )
-      player.typeChanges.push(`${minutes}:${seconds} - ${player.role.type}`)
-    },
-    minElapsedMinutes,
-    maxElapsedMinutes
-  )
+
+  let interval
+  ;(function (p) {
+    interval = setRandomInterval(
+      () => {
+        p.role.type = p.role.type === 'Crewmate' ? 'Imposter' : 'Crewmate'
+
+        const now = new Date()
+        var timeDiff = new Date(now - interaction.client.game.startedGameTime)
+        timeDiff /= 1000
+        var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
+        timeDiff = Math.floor(timeDiff / 60)
+        var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
+
+        userInstance.send(`${minutes}:${seconds} - You are now: ${p.role.type}`)
+        p.typeChanges.push(`${minutes}:${seconds} - ${p.role.type}`)
+      },
+      minElapsedMinutes,
+      maxElapsedMinutes
+    )
+  })(player)
+
+  return interval
 }
 
 const setRandomInterval = (intervalFunction, minDelay, maxDelay) => {
@@ -123,4 +140,9 @@ function getRandomOrder(orders) {
   return orders[index]
 }
 
-module.exports = { initOrderPlayers, stopOrderPlayers, stopCameleonPlayers }
+module.exports = {
+  initOrderPlayers,
+  initCameleonPlayers,
+  stopOrderPlayers,
+  stopCameleonPlayers,
+}
