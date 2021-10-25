@@ -59,12 +59,13 @@ function attributeDifferentRoles(interaction, team) {
   var mapped_roles = []
   const isBlueTeam = team === interaction.client.game.teamBlue
   const oneCameleon = getRandomInt(3) === 0
-  let imposter_count = getRandomInt(
-    isBlueTeam
-      ? interaction.client.game.maxBlueImposterCount
-      : interaction.client.game.maxRedImposterCount
-  )
-  imposter_count += oneCameleon ? 0 : 1
+  let imposter_count =
+    getRandomInt(
+      isBlueTeam
+        ? interaction.client.game.maxBlueImposterCount
+        : interaction.client.game.maxRedImposterCount
+    ) + 1
+  imposter_count -= oneCameleon ? 1 : 0
 
   if (oneCameleon) {
     const role = cameleon
