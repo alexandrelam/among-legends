@@ -65,9 +65,9 @@ function attributeDifferentRoles(interaction, team) {
         ? interaction.client.game.maxBlueImposterCount
         : interaction.client.game.maxRedImposterCount
     ) + 1
-  imposter_count -= oneCameleon ? 1 : 0
 
-  if (oneCameleon) {
+  if (imposter_count === 2 && oneCameleon) {
+    imposter_count -= 1
     const role = cameleon
     role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
     mapped_roles.push(role)
