@@ -140,6 +140,14 @@ function getCurrentPlayer(interaction) {
   return all_players.find((p) => player_tag === p.tag)
 }
 
+function getPlayer(interaction, player_tag) {
+  const all_players = [
+    ...interaction.client.game.teamBlue,
+    ...interaction.client.game.teamRed,
+  ]
+  return all_players.find((p) => player_tag === p.tag)
+}
+
 function getLeaderboard(interaction, team) {
   const isBlueTeam = team === interaction.client.game.teamBlue
 
@@ -179,4 +187,5 @@ module.exports = {
   getChannel,
   getLeaderboard,
   getRandomInt,
+  getPlayer,
 }
