@@ -38,8 +38,8 @@ module.exports.handleSelect = async (interaction) => {
     ) {
       interaction.client.game.isBlueVoting = false
       if (blueTeam.length) {
-        revealRoles(interaction, blueTeam, channel)
         handleVoteMajority(blueTeam)
+        revealRoles(interaction, blueTeam, channel)
         const embed = getLeaderboard(interaction, blueTeam)
         if (channel) channel.send({ embeds: [embed] })
       }
@@ -51,8 +51,8 @@ module.exports.handleSelect = async (interaction) => {
     ) {
       interaction.client.game.isRedVoting = false
       if (redTeam.length) {
-        revealRoles(interaction, redTeam, channel)
         handleVoteMajority(redTeam)
+        revealRoles(interaction, redTeam, channel)
         const embed = getLeaderboard(interaction, redTeam)
         if (channel) channel.send({ embeds: [embed] })
       }
