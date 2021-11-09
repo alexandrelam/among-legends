@@ -63,7 +63,9 @@ module.exports.handleSelect = async (interaction) => {
       !interaction.client.game.isBlueVoting &&
       interaction.client.game.voteMessage
     ) {
-      interaction.client.game.voteMessage.delete()
+      interaction.client.game.voteMessage
+        .delete()
+        .catch((err) => console.log('Could not delete the voteMessage', err))
     }
   }
 }
