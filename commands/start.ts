@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { initOrderPlayers, initCameleonPlayers } = require('../other/orderRoles')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { initCameleonPlayers, initOrderPlayers } from '../other/orderRoles'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('start')
     .setDescription('Starts the game'),
@@ -20,19 +21,22 @@ module.exports = {
       interaction.client.game.isBlueVoting = false
       interaction.client.game.isRedVoting = false
       interaction.client.game.startedGameTime = new Date()
+
       interaction.client.game.intervalIds = initOrderPlayers(interaction)
       interaction.client.game.cameleonIntervals =
         initCameleonPlayers(interaction)
 
-      players.forEach((p) => {
+      players.forEach((p: any) => {
         p.hasVoted = false
         p.votedPlayer = null
         p.computedScore = []
       })
 
-      interaction.reply('Game has started!')
+      await interaction.reply('Game has started!')
     } else {
-      interaction.reply('Cannot start game')
+      await interaction.reply('Cannot start game')
     }
   },
 }
+
+module.exports = command

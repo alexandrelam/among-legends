@@ -1,5 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-module.exports = {
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { Command } from '../types/global'
+
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('wipe')
     .setDescription('Reset game and remove all players'),
@@ -16,6 +18,8 @@ module.exports = {
     interaction.client.game.channel = null
     interaction.client.game.joinMessage = null
     interaction.client.game.startedGameTime = null
-    interaction.reply('Boom, big reset!')
+    await interaction.reply('Boom, big reset!')
   },
 }
+
+module.exports = command

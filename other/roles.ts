@@ -1,4 +1,4 @@
-const crewmateRoles = [
+export const crewmateRoles = [
   {
     type: 'Crewmate',
     name: 'Taupe',
@@ -65,7 +65,7 @@ const crewmateRoles = [
   },
 ]
 
-const imposterRoles = [
+export const imposterRoles = [
   {
     type: 'Imposter',
     name: 'Imposter',
@@ -75,11 +75,11 @@ const imposterRoles = [
   },
 ]
 
-const cameleon = {
+export const cameleon = {
   type: '',
   name: 'Cameleon',
   description: 'Gagner ou perdre la game en fonction du camps reçu en DM',
   image: 'cameleon.jpg',
 }
 
-module.exports = { crewmateRoles, imposterRoles, cameleon }
+export default { crewmateRoles, imposterRoles, cameleon }

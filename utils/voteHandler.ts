@@ -1,6 +1,6 @@
-const Player = require('../game/Player')
+import Player from '../game/Player'
 
-function givePoint(curr_player, voted_player) {
+function givePoint(curr_player: any, voted_player: any) {
   if (voted_player.role.type === 'Imposter') {
     if (curr_player) {
       curr_player.score++
@@ -9,7 +9,7 @@ function givePoint(curr_player, voted_player) {
   }
 }
 
-function handleVoteImposter(interaction, player, team) {
+export function handleVoteImposter(interaction: any, player: any, team: any[]) {
   player.hasVoted = true
 
   if (interaction.values[0] === 'nobody') {
@@ -53,7 +53,7 @@ function handleVoteImposter(interaction, player, team) {
   }
 }
 
-function handleVoteMajority(team) {
+export function handleVoteMajority(team: any[]) {
   const votedImposters = team.filter(
     (p) =>
       p.votedPlayer instanceof Player && p.votedPlayer.role.type === 'Imposter'
@@ -67,4 +67,4 @@ function handleVoteMajority(team) {
   }
 }
 
-module.exports = { handleVoteImposter, handleVoteMajority }
+export default { handleVoteImposter, handleVoteMajority }

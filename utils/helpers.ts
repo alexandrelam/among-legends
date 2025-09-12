@@ -1,19 +1,23 @@
-const Player = require('../game/Player')
-const config = require('../config.json')
-const { crewmateRoles, imposterRoles, cameleon } = require('../other/roles')
-const { MessageEmbed } = require('discord.js')
+import { MessageEmbed } from 'discord.js'
+import config from '../config.json'
+import Player from '../game/Player'
+import { cameleon, crewmateRoles, imposterRoles } from '../other/roles'
 
-function isPlayerInTeam(playerTag, team) {
+export function isPlayerInTeam(playerTag: string, team: any[]) {
   return team.some((p) => p.tag === playerTag)
 }
 
-function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
+export function playerJoinTeam(
+  interaction: any,
+  team: any[],
+  opposingTeam: any[],
+  teamLabel: string
+) {
   const userInstance = interaction.user
   const playerTag = userInstance.tag
 
-  const newPlayer = new Player(userInstance)
+  const newPlayer = new (Player as any)(userInstance)
 
-  // if player is in opposite team switch him
   if (isPlayerInTeam(playerTag, opposingTeam)) {
     const playerToSwitch = opposingTeam.find((p) => p.tag === playerTag)
     opposingTeam.splice(opposingTeam.indexOf(playerToSwitch), 1)
@@ -23,17 +27,12 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
       content: `You switched to ${teamLabel} team`,
       ephemeral: true,
     })
-
-    // if player is not already in team add him
   } else if (!isPlayerInTeam(playerTag, team)) {
     team.push(newPlayer)
-
     interaction.reply({
       content: `You joined ${teamLabel} team`,
       ephemeral: true,
     })
-
-    // if player is already in team don't add him
   } else {
     interaction.reply({
       content: `You already are in ${teamLabel} team`,
@@ -42,7 +41,7 @@ function playerJoinTeam(interaction, team, opposingTeam, teamLabel) {
   }
 }
 
-function attributeSameRole(team) {
+function attributeSameRole(team: any[]) {
   const isAllCameleon = getRandomInt(4) === 0
   if (isAllCameleon) {
     team.forEach((p) => {
@@ -55,10 +54,10 @@ function attributeSameRole(team) {
     team.forEach((p) => (p.role = sameRole))
   }
 }
-function attributeDifferentRoles(interaction, team) {
-  var mapped_roles = []
+function attributeDifferentRoles(interaction: any, team: any[]) {
+  const mapped_roles: any[] = []
   const isBlueTeam = team === interaction.client.game.teamBlue
-  const oneCameleon = getRandomInt(3) === 0
+  const oneCameleon = true //getRandomInt(3) === 0
   let imposter_count =
     getRandomInt(
       isBlueTeam
@@ -66,7 +65,8 @@ function attributeDifferentRoles(interaction, team) {
         : interaction.client.game.maxRedImposterCount
     ) + 1
 
-  if (imposter_count === 2 && oneCameleon) {
+  if (oneCameleon) {
+    //(imposter_count === 2 && oneCameleon) {
     imposter_count -= 1
     const role = cameleon
     role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
@@ -74,12 +74,10 @@ function attributeDifferentRoles(interaction, team) {
   }
 
   for (let i = 0; i < imposter_count; i++) {
-    //Push imposters
     mapped_roles.push(weightedRand(imposterRoles))
   }
 
   while (mapped_roles.length < team.length) {
-    //Fill with random roles
     mapped_roles.push(weightedRand(crewmateRoles))
   }
 
@@ -89,7 +87,7 @@ function attributeDifferentRoles(interaction, team) {
   }
 }
 
-function attributeRoles(interaction, team) {
+export function attributeRoles(interaction: any, team: any[]) {
   const isAllSameRoles = getRandomInt(5) === 0
   if (isAllSameRoles) {
     attributeSameRole(team)
@@ -98,40 +96,38 @@ function attributeRoles(interaction, team) {
   }
 }
 
-function weightedRand(list) {
-  var i,
-    sum = 0,
-    r = Math.random()
-  for (i of list) {
+function weightedRand(list: any[]) {
+  let sum = 0
+  const r = Math.random()
+  for (const i of list) {
     sum += i.weight
     if (r <= sum) return i
   }
 }
 
-function getRandomInt(max) {
+export function getRandomInt(max: number) {
   return Math.floor(Math.random() * max)
 }
 
-function shuffle(a) {
-  var j, x, i
-  for (i = a.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i + 1))
-    x = a[i]
-    a[i] = a[j]
-    a[j] = x
+function shuffle(a: any[]) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
   }
   return a
 }
 
-function getChannel(interaction) {
+export function getChannel(interaction: any) {
   return interaction.client.channels.cache.get(interaction.channelId)
 }
 
-function getImageUrl(imageName) {
-  return `https://raw.githubusercontent.com/${config.gituser}/${config.repo}/main/assets/${imageName}`
+export function getImageUrl(imageName: string) {
+  return `https://raw.githubusercontent.com/${(config as any).gituser}/${
+    (config as any).repo
+  }/main/assets/${imageName}`
 }
 
-function getCurrentPlayer(interaction) {
+export function getCurrentPlayer(interaction: any) {
   const player_tag = interaction.user.tag
   const all_players = [
     ...interaction.client.game.teamBlue,
@@ -140,7 +136,7 @@ function getCurrentPlayer(interaction) {
   return all_players.find((p) => player_tag === p.tag)
 }
 
-function getPlayer(interaction, player_tag) {
+export function getPlayer(interaction: any, player_tag: string) {
   const all_players = [
     ...interaction.client.game.teamBlue,
     ...interaction.client.game.teamRed,
@@ -148,14 +144,13 @@ function getPlayer(interaction, player_tag) {
   return all_players.find((p) => player_tag === p.tag)
 }
 
-function getLeaderboard(interaction, team) {
+export function getLeaderboard(interaction: any, team: any[]) {
   const isBlueTeam = team === interaction.client.game.teamBlue
-
   team.sort((a, b) => (a.score > b.score ? -1 : 1))
 
-  let tags = [],
-    score = [],
-    rank = []
+  let tags: string[] = [],
+    score: number[] = [],
+    rank: number[] = []
 
   if (team.length) {
     tags = team.map((p) => p.tag.split('#')[0])
@@ -178,7 +173,7 @@ function getLeaderboard(interaction, team) {
   }
 }
 
-module.exports = {
+export default {
   isPlayerInTeam,
   playerJoinTeam,
   attributeRoles,

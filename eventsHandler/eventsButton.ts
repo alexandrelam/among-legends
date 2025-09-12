@@ -1,20 +1,19 @@
-const {
-  playerJoinTeam,
+import { MessageEmbed } from 'discord.js'
+import {
   attributeRoles,
-  getImageUrl,
   getCurrentPlayer,
-} = require('../utils/helpers')
-const { MessageEmbed } = require('discord.js')
-const { getJoinEmbed } = require('../other/embedHelper')
+  getImageUrl,
+  playerJoinTeam,
+} from '../utils/helpers'
 
-module.exports.handleButton = async (interaction) => {
+export const handleButton = async (interaction: any) => {
   if (!interaction.isButton()) return
 
   if (interaction.customId.includes('join')) {
     if (!interaction.client.game.isPlaying) {
       const teamBlue = interaction.client.game.teamBlue
       const teamRed = interaction.client.game.teamRed
-      let embeds = []
+      let embeds: any[] = []
 
       if (
         interaction.customId === 'join-blue' &&
@@ -22,8 +21,8 @@ module.exports.handleButton = async (interaction) => {
       ) {
         playerJoinTeam(interaction, teamBlue, teamRed, 'blue')
         attributeRoles(interaction, teamBlue)
-
         if (interaction.client.game.joinMessage) {
+          const { getJoinEmbed } = require('../other/embedHelper')
           embeds = getJoinEmbed(
             interaction.client.game.teamBlue,
             interaction.client.game.teamRed
@@ -37,8 +36,8 @@ module.exports.handleButton = async (interaction) => {
       ) {
         playerJoinTeam(interaction, teamRed, teamBlue, 'red')
         attributeRoles(interaction, teamRed)
-
         if (interaction.client.game.joinMessage) {
+          const { getJoinEmbed } = require('../other/embedHelper')
           embeds = getJoinEmbed(
             interaction.client.game.teamBlue,
             interaction.client.game.teamRed
@@ -47,21 +46,11 @@ module.exports.handleButton = async (interaction) => {
       }
 
       if (embeds.length) {
-        interaction.client.game.joinMessage.edit({
-          embeds: embeds,
-        })
+        interaction.client.game.joinMessage.edit({ embeds })
       }
 
-      if (teamBlue.length > 3) {
-        interaction.client.game.maxBlueImposterCount = 2
-      } else {
-        interaction.client.game.maxBlueImposterCount = 1
-      }
-      if (teamRed.length > 3) {
-        interaction.client.game.maxRedImposterCount = 2
-      } else {
-        interaction.client.game.maxRedImposterCount = 1
-      }
+      interaction.client.game.maxBlueImposterCount = teamBlue.length > 3 ? 2 : 1
+      interaction.client.game.maxRedImposterCount = teamRed.length > 3 ? 2 : 1
     } else {
       await interaction.reply({
         content: 'You cannot join an ongoing game!',
@@ -79,10 +68,7 @@ module.exports.handleButton = async (interaction) => {
         .setDescription(player.role.description)
         .setThumbnail(getImageUrl(player.role.image))
 
-      await interaction.reply({
-        ephemeral: true,
-        embeds: [embed],
-      })
+      await interaction.reply({ ephemeral: true, embeds: [embed] })
     } else {
       await interaction.reply({
         content: 'You did not join the game!',

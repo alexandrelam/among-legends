@@ -1,9 +1,9 @@
-const { MessageEmbed } = require('discord.js')
+import { MessageEmbed } from 'discord.js'
 
-function getVoteEmbed(teamBlue, teamRed) {
-  const embeds = []
-  let blue = null,
-    red = null
+export function getVoteEmbed(teamBlue: any[], teamRed: any[]) {
+  const embeds: MessageEmbed[] = []
+  let blue: MessageEmbed | null = null
+  let red: MessageEmbed | null = null
   if (teamBlue.filter((p) => !p.hasVoted).length) {
     blue = new MessageEmbed()
       .setColor('#0099ff')
@@ -31,10 +31,10 @@ function getVoteEmbed(teamBlue, teamRed) {
   return embeds
 }
 
-function getJoinEmbed(teamBlue, teamRed) {
-  const embeds = []
-  let blue = null,
-    red = null
+export function getJoinEmbed(teamBlue: any[], teamRed: any[]) {
+  const embeds: MessageEmbed[] = []
+  let blue: MessageEmbed | null = null
+  let red: MessageEmbed | null = null
   if (teamBlue.length) {
     blue = new MessageEmbed()
       .setColor('#0099ff')
@@ -52,4 +52,4 @@ function getJoinEmbed(teamBlue, teamRed) {
   return embeds
 }
 
-module.exports = { getVoteEmbed, getJoinEmbed }
+export default { getVoteEmbed, getJoinEmbed }

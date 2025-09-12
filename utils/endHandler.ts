@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js')
-const Player = require('../game/Player')
-const { getImageUrl } = require('./helpers')
+import { MessageEmbed } from 'discord.js'
+import Player from '../game/Player'
+import { getImageUrl } from './helpers'
 
-function handleEndingGame(winningTeam, losingTeam) {
+export function handleEndingGame(winningTeam: Player[], losingTeam: Player[]) {
   winningTeam.forEach((p) => {
     if (p.role.type === 'Crewmate') {
       p.score++
@@ -17,14 +17,13 @@ function handleEndingGame(winningTeam, losingTeam) {
   })
 }
 
-function revealRoles(interaction, team, channel) {
+export function revealRoles(interaction: any, team: any[], channel: any) {
   if (channel) {
     const isBlueTeam = team === interaction.client.game.teamBlue
-
     if (team.length) {
-      const embeds = []
+      const embeds: MessageEmbed[] = []
       team.forEach((p) => {
-        var embed = new MessageEmbed()
+        const embed = new MessageEmbed()
           .setColor(isBlueTeam ? '#0099ff' : '#ff0055')
           .setAuthor(
             p.tag.split('#')[0],
@@ -33,11 +32,7 @@ function revealRoles(interaction, team, channel) {
           .setThumbnail(getImageUrl(p.role.image))
           .addFields(
             { name: 'Role', value: p.role.name, inline: true },
-            {
-              name: 'Description',
-              value: p.role.description,
-              inline: true,
-            },
+            { name: 'Description', value: p.role.description, inline: true },
             {
               name: 'Voted',
               value:
@@ -53,9 +48,9 @@ function revealRoles(interaction, team, channel) {
           embed.addField('Side Changes', p.typeChanges.join('\n'))
         embeds.push(embed)
       })
-      channel.send({ embeds: embeds })
+      channel.send({ embeds })
     }
   }
 }
 
-module.exports = { handleEndingGame, revealRoles }
+export default { handleEndingGame, revealRoles }

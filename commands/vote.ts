@@ -1,9 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageSelectMenu } = require('discord.js')
-const { getVoteEmbed } = require('../other/embedHelper')
-const { getChannel } = require('../utils/helpers')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageSelectMenu } from 'discord.js'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('vote')
     .setDescription('Vote for the player you think is the imposter'),
@@ -14,15 +13,13 @@ module.exports = {
     ) {
       const teamBlue = interaction.client.game.teamBlue
       const teamRed = interaction.client.game.teamRed
+      const { getChannel } = require('../utils/helpers')
       interaction.client.game.channel = getChannel(interaction)
 
-      teamBlue.forEach((p) => {
-        let choices = teamBlue
-          .filter((player) => p.tag !== player.tag)
-          .map((player) => ({
-            label: player.tag,
-            value: player.tag,
-          }))
+      teamBlue.forEach((p: any) => {
+        const choices = teamBlue
+          .filter((player: any) => p.tag !== player.tag)
+          .map((player: any) => ({ label: player.tag, value: player.tag }))
         choices.push({ label: 'Nobody', value: 'nobody' })
         choices.push({ label: 'Everyone', value: 'everyone' })
 
@@ -39,13 +36,10 @@ module.exports = {
         })
       })
 
-      teamRed.forEach((p) => {
-        let choices = teamRed
-          .filter((player) => p.tag !== player.tag)
-          .map((player) => ({
-            label: player.tag,
-            value: player.tag,
-          }))
+      teamRed.forEach((p: any) => {
+        const choices = teamRed
+          .filter((player: any) => p.tag !== player.tag)
+          .map((player: any) => ({ label: player.tag, value: player.tag }))
         choices.push({ label: 'Nobody', value: 'nobody' })
         choices.push({ label: 'Everyone', value: 'everyone' })
 
@@ -62,6 +56,7 @@ module.exports = {
         })
       })
 
+      const { getVoteEmbed } = require('../other/embedHelper')
       const embed = getVoteEmbed(teamBlue, teamRed)
 
       await interaction.reply({
@@ -78,3 +73,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = command

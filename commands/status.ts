@@ -1,5 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-module.exports = {
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { Command } from '../types/global'
+
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('status')
     .setDescription('Display game status'),
@@ -9,3 +11,5 @@ module.exports = {
     else await interaction.reply('Game is stopped')
   },
 }
+
+module.exports = command

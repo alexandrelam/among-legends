@@ -1,10 +1,7 @@
-module.exports.handleCommand = async (interaction) => {
+export const handleCommand = async (interaction: any) => {
   if (!interaction.isCommand()) return
-
   const command = interaction.client.commands.get(interaction.commandName)
-
   if (!command) return
-
   try {
     await command.execute(interaction)
     console.log(

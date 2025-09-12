@@ -1,5 +1,3 @@
-const { getRandomInt } = require('../utils/helpers')
-
 const canardOrders = [
   "Dans les 30 secondes, utilise tout ton kit de sorts! (sauf les sorts d'invocateurs)",
   'Dans les 30 secondes, utilise ton deuxième summoner spell!',
@@ -22,45 +20,55 @@ const explorateurOrders = [
   'Visite la base ennemi!',
 ]
 
-function getOrders(userInstance, orders, player) {
+interface PlayerLike {
+  role: { name: string; type: string }
+  orders?: string[]
+  userInstance: { send: (msg: string) => void }
+  typeChanges?: string[]
+}
+
+function getOrders(
+  userInstance: PlayerLike['userInstance'],
+  orders: string[],
+  player: PlayerLike
+) {
   return setInterval(() => {
     const randomOrder = getRandomOrder(orders)
     userInstance.send(randomOrder)
-    player.orders.push(randomOrder)
+    player.orders!.push(randomOrder)
   }, 5 * 60 * 1000)
 }
 
-function initCameleonPlayers(interaction) {
-  const players = [
+export function initCameleonPlayers(interaction: any) {
+  const players: PlayerLike[] = [
     ...interaction.client.game.teamBlue,
     ...interaction.client.game.teamRed,
   ]
 
-  let intervalIds = []
+  const intervalIds: Array<() => void> = [] // only stopper functions now
 
   players.forEach((p) => {
     p.typeChanges = []
-
     if (p.role.name === 'Cameleon') {
       p.typeChanges.push(`Started as ${p.role.type}`)
-      const id = getType(interaction, p.userInstance, p)
-      intervalIds.push(id)
+      const stopFn = getType(interaction, p.userInstance, p) // returns stopper
+      intervalIds.push(stopFn)
     }
   })
 
   return intervalIds
 }
 
-function initOrderPlayers(interaction) {
-  const players = [
+export function initOrderPlayers(interaction: any) {
+  const players: PlayerLike[] = [
     ...interaction.client.game.teamBlue,
     ...interaction.client.game.teamRed,
   ]
 
-  let intervalIds = []
+  const intervalIds: NodeJS.Timeout[] = []
 
   players.forEach((p) => {
-    let id
+    let id: NodeJS.Timeout | undefined
     p.orders = []
     if (p.role.name === 'Canard') {
       id = getOrders(p.userInstance, canardOrders, p)
@@ -74,29 +82,35 @@ function initOrderPlayers(interaction) {
   return intervalIds
 }
 
-function getType(interaction, userInstance, player) {
+function getType(
+  interaction: any,
+  userInstance: PlayerLike['userInstance'],
+  player: PlayerLike
+) {
   const minute = 1000 * 60
   const maxElapsedMinutes = 10 * minute
   const minElapsedMinutes = 3 * minute
-  const initalType = player.role.type
+  const initialType = player.role.type
 
   return setRandomInterval(
-    (p) => {
-      if (p.typeChanges.length % 2 === 1) {
-        p.role.type = initalType === 'Crewmate' ? 'Imposter' : 'Crewmate'
+    (p: PlayerLike) => {
+      if (p.typeChanges!.length % 2 === 1) {
+        p.role.type = initialType === 'Crewmate' ? 'Imposter' : 'Crewmate'
       } else {
-        p.role.type = initalType
+        p.role.type = initialType
       }
 
       const now = new Date()
-      var timeDiff = new Date(now - interaction.client.game.startedGameTime)
+      let timeDiff: any = new Date(
+        now.getTime() - interaction.client.game.startedGameTime
+      )
       timeDiff /= 1000
-      var seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      const seconds = ('0' + Math.round(timeDiff % 60)).slice(-2)
       timeDiff = Math.floor(timeDiff / 60)
-      var minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
+      const minutes = ('0' + Math.round(timeDiff % 60)).slice(-2)
 
       userInstance.send(`${minutes}:${seconds} - You are now: ${p.role.type}`)
-      p.typeChanges.push(`${minutes}:${seconds} - ${p.role.type}`)
+      p.typeChanges!.push(`${minutes}:${seconds} - ${p.role.type}`)
     },
     minElapsedMinutes,
     maxElapsedMinutes,
@@ -104,46 +118,44 @@ function getType(interaction, userInstance, player) {
   )
 }
 
-const setRandomInterval = (intervalFunction, minDelay, maxDelay, player) => {
-  let timeout
+const setRandomInterval = (
+  intervalFunction: (p: PlayerLike) => void,
+  minDelay: number,
+  maxDelay: number,
+  player: PlayerLike
+): (() => void) => {
+  let timeout: NodeJS.Timeout | undefined
+  let active = true
 
   const runInterval = () => {
-    const timeoutFunction = (p) => {
+    if (!active) return
+    const timeoutFunction = (p: PlayerLike) => {
+      if (!active) return
       intervalFunction(p)
       runInterval()
     }
-
     const delay =
       Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
-
     timeout = setTimeout(timeoutFunction, delay, player)
   }
 
   runInterval()
 
-  return {
-    clear() {
-      clearTimeout(timeout)
-    },
+  return () => {
+    active = false
+    if (timeout) clearTimeout(timeout)
   }
 }
 
-function stopOrderPlayers(intervalIds) {
-  intervalIds.forEach((id) => clearInterval(id))
+export function stopOrderPlayers(intervalIds: NodeJS.Timeout[]) {
+  intervalIds.forEach((id) => clearTimeout(id))
 }
 
-function stopCameleonPlayers(intervals) {
-  intervals.forEach((i) => i.clear())
+export function stopCameleonPlayers(intervals: Array<() => void>) {
+  intervals.forEach((stop) => stop())
 }
 
-function getRandomOrder(orders) {
+function getRandomOrder(orders: string[]) {
   const index = Math.floor(Math.random() * orders.length)
   return orders[index]
-}
-
-module.exports = {
-  initOrderPlayers,
-  initCameleonPlayers,
-  stopOrderPlayers,
-  stopCameleonPlayers,
 }

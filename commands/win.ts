@@ -1,8 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { stopOrderPlayers, stopCameleonPlayers } = require('../other/orderRoles')
-const { handleEndingGame } = require('../utils/endHandler')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import Player from '../game/Player'
+import { stopCameleonPlayers, stopOrderPlayers } from '../other/orderRoles'
+import { Command } from '../types/global'
+import { handleEndingGame } from '../utils/endHandler'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('win')
     .setDescription('End the game and choose the winning team.')
@@ -19,13 +21,14 @@ module.exports = {
       interaction.client.game.isPlaying = false
       interaction.client.game.isBlueVoting = true
       interaction.client.game.isRedVoting = true
-
       interaction.client.game.startedGameTime = null
+
       stopOrderPlayers(interaction.client.game.intervalIds)
       stopCameleonPlayers(interaction.client.game.cameleonIntervals)
 
-      const team = interaction.options.getString('team')
-      var winningTeam, losingTeam
+      const team = interaction.options.getString('team', true)
+      let winningTeam: Player[]
+      let losingTeam: Player[]
       if (team === 'Blue') {
         winningTeam = interaction.client.game.teamBlue
         losingTeam = interaction.client.game.teamRed
@@ -34,11 +37,9 @@ module.exports = {
         losingTeam = interaction.client.game.teamBlue
       }
 
-      handleEndingGame(winningTeam, losingTeam)
+      handleEndingGame(winningTeam!, losingTeam!)
 
-      interaction.reply({
-        content: `${team} team has won the game`,
-      })
+      await interaction.reply({ content: `${team} team has won the game` })
     } else {
       await interaction.reply({
         content: 'There is no game to end',
@@ -47,3 +48,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = command

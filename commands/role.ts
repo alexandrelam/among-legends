@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageButton } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageButton } from 'discord.js'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('role')
     .setDescription('Give role to players'),
@@ -19,3 +20,5 @@ module.exports = {
     })
   },
 }
+
+module.exports = command

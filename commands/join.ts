@@ -1,9 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageButton } = require('discord.js')
-const { getJoinEmbed } = require('../other/embedHelper')
-const { getLeaderboard } = require('../utils/helpers')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageButton } from 'discord.js'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('join')
     .setDescription('Make players join for the game!'),
@@ -20,21 +19,16 @@ module.exports = {
           .setStyle('DANGER'),
       ])
 
+      const { getJoinEmbed } = require('../other/embedHelper')
       const embeds = getJoinEmbed(
         interaction.client.game.teamBlue,
         interaction.client.game.teamRed
       )
 
       if (embeds.length) {
-        await interaction.reply({
-          components: [row],
-          embeds: embeds,
-        })
+        await interaction.reply({ components: [row], embeds })
       } else {
-        await interaction.reply({
-          content: '** **', //Invisible content (Can't send Buttons-only messages..)
-          components: [row],
-        })
+        await interaction.reply({ content: '** **', components: [row] })
       }
 
       interaction.client.game.joinMessage = await interaction.fetchReply()
@@ -46,3 +40,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = command

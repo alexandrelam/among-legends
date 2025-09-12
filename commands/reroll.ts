@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { attributeRoles } = require('../utils/helpers')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('reroll')
     .setDescription('Reroll all roles!'),
@@ -11,6 +11,7 @@ module.exports = {
       !interaction.client.game.isBlueVoting &&
       !interaction.client.game.isRedVoting
     ) {
+      const { attributeRoles } = require('../utils/helpers')
       if (interaction.client.game.teamBlue.length)
         attributeRoles(interaction, interaction.client.game.teamBlue)
       if (interaction.client.game.teamRed.length)
@@ -21,3 +22,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = command

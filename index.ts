@@ -1,28 +1,28 @@
-const fs = require('fs')
-require('dotenv').config()
-const { Client, Collection, Intents } = require('discord.js')
-const game = require('./game/game')
+import { Client, Collection, Intents } from 'discord.js'
+import 'dotenv/config'
+import fs from 'fs'
+import game from './game/game'
+import { Command } from './types/global'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
-client.commands = new Collection()
-
+client.commands = new Collection<string, Command>()
 client.game = game
 
 const commandFiles = fs
   .readdirSync('./commands')
-  .filter((file) => file.endsWith('.js'))
-
+  .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`)
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const command: Command = require(`./commands/${file}`)
   client.commands.set(command.data.name, command)
 }
 
 const eventFiles = fs
   .readdirSync('./events')
-  .filter((file) => file.endsWith('.js'))
-
+  .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
 for (const file of eventFiles) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const event = require(`./events/${file}`)
   if (event.once) {
     client.once(event.name, (...args) => event.execute(...args))

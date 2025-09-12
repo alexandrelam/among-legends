@@ -1,12 +1,8 @@
-const {
-  handleVoteImposter,
-  handleVoteMajority,
-} = require('../utils/voteHandler')
-const { revealRoles } = require('../utils/endHandler')
-const { getCurrentPlayer, getLeaderboard } = require('../utils/helpers')
-const { getVoteEmbed } = require('../other/embedHelper')
+import { revealRoles } from '../utils/endHandler'
+import { getCurrentPlayer, getLeaderboard } from '../utils/helpers'
+import { handleVoteImposter, handleVoteMajority } from '../utils/voteHandler'
 
-module.exports.handleSelect = async (interaction) => {
+export const handleSelect = async (interaction: any) => {
   if (!interaction.isSelectMenu()) return
 
   if (interaction.customId === 'vote-imposter') {
@@ -15,25 +11,27 @@ module.exports.handleSelect = async (interaction) => {
     const redTeam = interaction.client.game.teamRed
 
     if (curr_player && !curr_player.hasVoted) {
-      const isBlueTeam = blueTeam.some((p) => p.tag === curr_player.tag)
+      const isBlueTeam = blueTeam.some((p: any) => p.tag === curr_player.tag)
       handleVoteImposter(
         interaction,
         curr_player,
         isBlueTeam ? blueTeam : redTeam
       )
+      const { getVoteEmbed } = require('../other/embedHelper')
       const embed = getVoteEmbed(blueTeam, redTeam)
       if (embed.length && interaction.client.game.voteMessage) {
-        interaction.client.game.voteMessage.edit({
-          embeds: embed,
-        })
+        interaction.client.game.voteMessage.edit({ embeds: embed })
       }
     } else {
-      interaction.reply({ content: 'You cannot vote twice', ephemeral: true })
+      await interaction.reply({
+        content: 'You cannot vote twice',
+        ephemeral: true,
+      })
     }
     const channel = interaction.client.game.channel
 
     if (
-      !blueTeam.some((p) => !p.hasVoted) &&
+      !blueTeam.some((p: any) => !p.hasVoted) &&
       interaction.client.game.isBlueVoting
     ) {
       interaction.client.game.isBlueVoting = false
@@ -46,7 +44,7 @@ module.exports.handleSelect = async (interaction) => {
     }
 
     if (
-      !redTeam.some((p) => !p.hasVoted) &&
+      !redTeam.some((p: any) => !p.hasVoted) &&
       interaction.client.game.isRedVoting
     ) {
       interaction.client.game.isRedVoting = false
@@ -65,7 +63,9 @@ module.exports.handleSelect = async (interaction) => {
     ) {
       interaction.client.game.voteMessage
         .delete()
-        .catch((err) => console.log('Could not delete the voteMessage', err))
+        .catch((err: any) =>
+          console.log('Could not delete the voteMessage', err)
+        )
     }
   }
 }

@@ -1,14 +1,15 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed } = require('discord.js')
-const { crewmateRoles, imposterRoles, cameleon } = require('../other/roles')
-const { getImageUrl } = require('../utils/helpers')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
+import { cameleon, crewmateRoles, imposterRoles } from '../other/roles'
+import { Command } from '../types/global'
+import { getImageUrl } from '../utils/helpers'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('roles')
     .setDescription('List all roles!'),
   async execute(interaction) {
-    const embeds = []
+    const embeds: MessageEmbed[] = []
     crewmateRoles.forEach((r) => {
       embeds.push(
         new MessageEmbed()
@@ -35,8 +36,8 @@ module.exports = {
       )
     })
 
-    interaction.reply({
-      embeds: embeds,
-    })
+    await interaction.reply({ embeds })
   },
 }
+
+module.exports = command

@@ -1,9 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageActionRow, MessageButton } = require('discord.js')
-const { getJoinEmbed } = require('../other/embedHelper')
-const { getCurrentPlayer, getPlayer } = require('../utils/helpers')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { Command } from '../types/global'
 
-module.exports = {
+const command: Command = {
   data: new SlashCommandBuilder()
     .setName('leave')
     .setDescription('Leave the game!')
@@ -17,31 +15,31 @@ module.exports = {
 
       const players = [...teamBlue, ...teamRed]
       const user = interaction.options.getUser('user')
+      const { getPlayer, getCurrentPlayer } = require('../utils/helpers')
       const curr_player = user
         ? getPlayer(interaction, `${user.username}#${user.discriminator}`)
         : getCurrentPlayer(interaction)
 
-      if (curr_player && players.some((p) => p.tag === curr_player.tag)) {
-        if (teamBlue.some((p) => p.tag === curr_player.tag)) {
+      if (curr_player && players.some((p: any) => p.tag === curr_player.tag)) {
+        if (teamBlue.some((p: any) => p.tag === curr_player.tag)) {
           interaction.client.game.teamBlue = teamBlue.filter(
-            (p) => p.tag !== curr_player.tag
+            (p: any) => p.tag !== curr_player.tag
           )
           await interaction.reply(`${curr_player.tag} left the game`)
-        } else if (teamRed.some((p) => p.tag === curr_player.tag)) {
+        } else if (teamRed.some((p: any) => p.tag === curr_player.tag)) {
           interaction.client.game.teamRed = teamRed.filter(
-            (p) => p.tag !== curr_player.tag
+            (p: any) => p.tag !== curr_player.tag
           )
           await interaction.reply(`${curr_player.tag} left the game`)
         }
 
+        const { getJoinEmbed } = require('../other/embedHelper')
         const embeds = getJoinEmbed(
           interaction.client.game.teamBlue,
           interaction.client.game.teamRed
         )
         if (embeds.length && interaction.client.game.joinMessage) {
-          interaction.client.game.joinMessage.edit({
-            embeds: embeds,
-          })
+          interaction.client.game.joinMessage.edit({ embeds })
         }
       } else {
         await interaction.reply({
@@ -52,3 +50,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = command
