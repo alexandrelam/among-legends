@@ -1,5 +1,5 @@
-const canardOrders = [
-  "Utilise tout ton kit de sorts MAINTENANT!",
+const failleCanardOrders = [
+  'Utilise tout ton kit de sorts MAINTENANT!',
   'Pousse ta team à faire un objectif !',
   'Pousse ta team à faire un dive !',
   'Vole une wave de sbires à un de tes alliés !',
@@ -8,6 +8,21 @@ const canardOrders = [
   'Achète 2 balise de contrôle !',
   'Achète 1 potion rechargeable !',
 ]
+
+const aramCanardOrders = [
+  'Utilise tout ton kit de sorts MAINTENANT!',
+  'Pousse ta team à faire un dive !',
+  'Dive dès que possible !',
+  'Achète un Elixir !',
+  'Vends un item, potion exclue !',
+  'Achète 1 potion rechargeable !',
+  'MEURT !',
+]
+
+const getCanardOrders = (mode: string) => {
+  if (mode === 'ARAM') return aramCanardOrders
+  return failleCanardOrders
+}
 
 const explorateurOrders = [
   'Tête la première, vérifie le contenu de 5 hautes herbes du côté ennemi (sans vision)',
@@ -71,7 +86,11 @@ export function initOrderPlayers(interaction: any) {
     let id: NodeJS.Timeout | undefined
     p.orders = []
     if (p.role.name === 'Canard') {
-      id = getOrders(p.userInstance, canardOrders, p)
+      id = getOrders(
+        p.userInstance,
+        getCanardOrders(interaction.client.game.selectedMode),
+        p
+      )
     } else if (p.role.name === 'Explorateur') {
       id = getOrders(p.userInstance, explorateurOrders, p)
     }
