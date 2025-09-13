@@ -1,12 +1,12 @@
 const canardOrders = [
-  "Dans les 30 secondes, utilise tout ton kit de sorts! (sauf les sorts d'invocateurs)",
-  'Dans les 30 secondes, utilise ton deuxième summoner spell!',
-  'Dans les 30 secondes, utilise ton premier summoner spell!',
-  'Casse deux plantes de la jungle maintenant!',
-  'Pousse ta team à faire un objectif!',
-  'Vole 10 sbires à un de tes alliés',
-  'Dive dès que possible!',
-  'Back maintenant!',
+  "Utilise tout ton kit de sorts MAINTENANT!",
+  'Pousse ta team à faire un objectif !',
+  'Pousse ta team à faire un dive !',
+  'Vole une wave de sbires à un de tes alliés !',
+  'Dive dès que possible !',
+  'Achète un Elixir !',
+  'Achète 2 balise de contrôle !',
+  'Achète 1 potion rechargeable !',
 ]
 
 const explorateurOrders = [
