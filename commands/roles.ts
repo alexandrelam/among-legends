@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import { cameleon, crewmateRoles, imposterRoles } from '../other/roles'
+import { cameleon, getCrewmateRoles, imposterRoles } from '../other/roles'
 import { Command } from '../types/global'
 import { getImageUrl } from '../utils/helpers'
 
@@ -10,7 +10,7 @@ const command: Command = {
     .setDescription('List all roles!'),
   async execute(interaction) {
     const embeds: MessageEmbed[] = []
-    crewmateRoles.forEach((r) => {
+    getCrewmateRoles('').forEach((r) => {
       embeds.push(
         new MessageEmbed()
           .setColor('#0099ff')

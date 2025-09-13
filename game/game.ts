@@ -14,6 +14,7 @@ export interface GameState {
   voteMessage: any
   startedGameTime: Date | null
   cameleonIntervals: (() => void)[]
+  selectedMode: 'ARAM' | 'FAILLE' | null
 }
 
 export const game: GameState = {
@@ -30,6 +31,7 @@ export const game: GameState = {
   voteMessage: null,
   startedGameTime: null,
   cameleonIntervals: [],
+  selectedMode: null,
 }
 
 export default game
