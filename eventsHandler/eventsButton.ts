@@ -9,6 +9,34 @@ import {
 export const handleButton = async (interaction: any) => {
   if (!interaction.isButton()) return
 
+  if (
+    interaction.customId === 'mode-aram' ||
+    interaction.customId === 'mode-faille'
+  ) {
+    if (interaction.client.game.isPlaying) {
+      await interaction.reply({
+        content: 'Le mode ne peut pas être changé pendant une partie en cours.',
+        ephemeral: true,
+      })
+      return
+    }
+
+    interaction.client.game.mode =
+      interaction.customId === 'mode-aram' ? 'ARAM' : "Faille de l'invocateur"
+
+    await interaction.reply({
+      content: `Mode sélectionné : ${interaction.client.game.mode}`,
+      ephemeral: true,
+    })
+
+    if (interaction.client.game.joinMessage) {
+      await interaction.client.game.joinMessage.edit({
+        content: `Mode sélectionné : ${interaction.client.game.mode}`,
+        components: [],
+      })
+    }
+  }
+
   if (interaction.customId.includes('join')) {
     if (!interaction.client.game.isPlaying) {
       const teamBlue = interaction.client.game.teamBlue

@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js'
 import config from '../config.json'
 import Player from '../game/Player'
-import { cameleon, crewmateRoles, imposterRoles } from '../other/roles'
+import { cameleon, getCrewmateRoles, imposterRoles } from '../other/roles'
 
 export function isPlayerInTeam(playerTag: string, team: any[]) {
   return team.some((p) => p.tag === playerTag)
@@ -41,7 +41,7 @@ export function playerJoinTeam(
   }
 }
 
-function attributeSameRole(team: any[]) {
+function attributeSameRole(interaction: any, team: any[]) {
   const isAllCameleon = getRandomInt(4) === 0
   if (isAllCameleon) {
     team.forEach((p) => {
@@ -50,14 +50,18 @@ function attributeSameRole(team: any[]) {
     })
   } else {
     const isAllCrewmate = getRandomInt(2) === 0
-    const sameRole = weightedRand(isAllCrewmate ? crewmateRoles : imposterRoles)
+    const sameRole = weightedRand(
+      isAllCrewmate
+        ? getCrewmateRoles(interaction.client.game.selectedMode)
+        : imposterRoles
+    )
     team.forEach((p) => (p.role = sameRole))
   }
 }
 function attributeDifferentRoles(interaction: any, team: any[]) {
   const mapped_roles: any[] = []
   const isBlueTeam = team === interaction.client.game.teamBlue
-  const oneCameleon = true //getRandomInt(3) === 0
+  const oneCameleon = getRandomInt(3) === 0
   let imposter_count =
     getRandomInt(
       isBlueTeam
@@ -65,8 +69,7 @@ function attributeDifferentRoles(interaction: any, team: any[]) {
         : interaction.client.game.maxRedImposterCount
     ) + 1
 
-  if (oneCameleon) {
-    //(imposter_count === 2 && oneCameleon) {
+  if (imposter_count === 2 && oneCameleon) {
     imposter_count -= 1
     const role = cameleon
     role.type = getRandomInt(2) === 0 ? 'Crewmate' : 'Imposter'
@@ -78,7 +81,9 @@ function attributeDifferentRoles(interaction: any, team: any[]) {
   }
 
   while (mapped_roles.length < team.length) {
-    mapped_roles.push(weightedRand(crewmateRoles))
+    mapped_roles.push(
+      weightedRand(getCrewmateRoles(interaction.client.game.selectedMode))
+    )
   }
 
   shuffle(mapped_roles)
@@ -90,18 +95,19 @@ function attributeDifferentRoles(interaction: any, team: any[]) {
 export function attributeRoles(interaction: any, team: any[]) {
   const isAllSameRoles = getRandomInt(5) === 0
   if (isAllSameRoles) {
-    attributeSameRole(team)
+    attributeSameRole(interaction, team)
   } else {
     attributeDifferentRoles(interaction, team)
   }
 }
 
-function weightedRand(list: any[]) {
-  let sum = 0
-  const r = Math.random()
+function weightedRand(list: { weight: number }[]) {
+  const total = list.reduce((sum, i) => sum + i.weight, 0)
+  let r = Math.random() * total
+
   for (const i of list) {
-    sum += i.weight
-    if (r <= sum) return i
+    if (r < i.weight) return i
+    r -= i.weight
   }
 }
 
